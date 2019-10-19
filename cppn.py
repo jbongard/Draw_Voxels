@@ -4,6 +4,8 @@ import math
 
 import numpy as np
 
+from scipy.ndimage import label
+
 class CPPN: 
 
     def __init__(self):
@@ -63,7 +65,9 @@ class CPPN:
                     else:
                         robot[x,y,z] = 0
 
-        self.Extract_Largest_Component(robot)
+        numComponents = self.Extract_Largest_Component(robot)
+
+        return numComponents
 
     def Print(self):
 
@@ -73,7 +77,11 @@ class CPPN:
 
     def Extract_Largest_Component(self,robot):
 
-        pass
+        labelledRobot, num_labels = label(robot)
+
+        print(robot)
+        print(labelledRobot)
+        return np.amax(labelledRobot)
 
     def Get_Action_From_Outputs(self,outputs):
 

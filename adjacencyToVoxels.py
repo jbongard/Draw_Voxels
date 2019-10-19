@@ -5,11 +5,20 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
 
 from cppn import CPPN
-cppn = CPPN()
 
-robot = np.zeros([c.robotResolution,c.robotResolution,c.robotResolution],dtype='f')
+numComponents = 0
 
-cppn.Paint(robot)
+while numComponents < 2:
+
+    cppn = CPPN()
+
+    robot = np.zeros([c.robotResolution,c.robotResolution,c.robotResolution],dtype='f')
+
+    numComponents = cppn.Paint(robot)
+
+    print(numComponents)
+
+exit()
 
 # n_voxels = np.random.choice([0,1,2] , size=(20,20,20) , p=[0.99,0.005,0.005])
 
