@@ -2,6 +2,10 @@ import numpy as np
 
 import math
 
+# -------------- Robot ------------------
+
+robotResolution = 5
+
 # ---------------- CPPN -----------------
 
 cppnInputs = 3 # x , y , z  

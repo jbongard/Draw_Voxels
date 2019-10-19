@@ -51,16 +51,29 @@ class CPPN:
         cols,rows,sheets = robot.shape
 
         for x in range(cols):
+            xScaled = self.Scale(x)
             for y in range(rows):
+                yScaled = self.Scale(y)
                 for z in range(sheets):
-                    print(self.Evaluate_At(x,y,z))
+                    zScaled = self.Scale(z)
+                    vals = self.Evaluate_At(xScaled,yScaled,zScaled)
 
+                    if vals[0] > 0:
+                        robot[x,y,z] = 1
+                    else:
+                        robot[x,y,z] = 0
+
+        self.Extract_Largest_Component(robot)
 
     def Print(self):
 
         print(self.weights)
 
 # ---------------- Private methods -----------
+
+    def Extract_Largest_Component(self,robot):
+
+        pass
 
     def Get_Action_From_Outputs(self,outputs):
 
@@ -164,3 +177,17 @@ class CPPN:
         activationFunctionType = np.random.randint(c.numCPPNActivationFunctions)
 
         activeLayer[h] = c.cppnActivationFunctions[activationFunctionType]
+
+    def Scale(self,OldValue):
+
+        OldMin = 0
+        OldMax = c.robotResolution - 1
+
+        NewMin = -1.0
+        NewMax = +1.0
+
+        OldRange = (OldMax - OldMin)  
+        NewRange = (NewMax - NewMin)  
+        NewValue = (((OldValue - OldMin) * NewRange) / OldRange) + NewMin
+
+        return NewValue
