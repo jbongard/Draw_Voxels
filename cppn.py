@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
+
 import constants as c
 
 import math
@@ -65,13 +68,25 @@ class CPPN:
                     else:
                         robot[x,y,z] = 0
 
-        numComponents = self.Extract_Largest_Component(robot)
+        labelledRobot , numComponents = self.Extract_Largest_Component(robot)
 
         return numComponents
 
-    def Print(self):
+    def Show(self):
 
-        print(self.weights)
+        robot = np.zeros([c.robotResolution,c.robotResolution,c.robotResolution],dtype='f')
+
+        self.Paint(robot)
+
+        facecolors = np.where(robot==2, 'salmon', 'lightgreen')
+
+        fig = plt.figure()
+
+        ax = fig.gca(projection='3d')
+
+        ax.voxels(robot, facecolors=facecolors , edgecolors = 'k')
+
+        plt.show()
 
 # ---------------- Private methods -----------
 
@@ -79,9 +94,7 @@ class CPPN:
 
         labelledRobot, num_labels = label(robot)
 
-        print(robot)
-        print(labelledRobot)
-        return np.amax(labelledRobot)
+        return labelledRobot, np.amax(labelledRobot)
 
     def Get_Action_From_Outputs(self,outputs):
 
@@ -186,6 +199,20 @@ class CPPN:
 
         activeLayer[h] = c.cppnActivationFunctions[activationFunctionType]
 
+    def Remove_Smaller_Components(self,robot,numComponents):
+
+        cols,rows,sheets = robot.shape
+
+        for x in range(cols):
+            for y in range(rows):
+                for z in range(sheets):
+
+                    if robot[x,y,z] < numComponents:
+
+                        robot[x,y,z] = 0
+
+        print(robot)
+	
     def Scale(self,OldValue):
 
         OldMin = 0

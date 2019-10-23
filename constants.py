@@ -2,9 +2,15 @@ import numpy as np
 
 import math
 
+# --------- Evolution -------------------
+
+popSize = 100
+
+numGenerations = 100
+
 # -------------- Robot ------------------
 
-robotResolution = 5
+robotResolution = 5 
 
 # ---------------- CPPN -----------------
 
