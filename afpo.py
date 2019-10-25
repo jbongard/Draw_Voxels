@@ -50,7 +50,55 @@ class AFPO:
             newCPPN.Mutate()
 
             self.cppns[defender] = newCPPN
-        
+       
+    def Compute_Surface_Area_Of(self,robot):
+
+        surfaceArea = 0
+
+        [rows,columns,sheets] = robot.shape
+
+        for row in range(0,rows-1):
+
+            for column in range(0,columns-1):
+
+                for sheet in range(0,sheets-1):
+
+                    if bool( robot[row,column,sheet] ) != bool( robot[row+1,column,sheet] ):
+
+                        surfaceArea = surfaceArea + 1
+
+                    if bool( robot[row,column,sheet] ) != bool( robot[row,column+1,sheet] ):
+
+                        surfaceArea = surfaceArea + 1
+
+                    if bool( robot[row,column,sheet] ) != bool( robot[row,column,sheet+1] ):
+
+                        surfaceArea = surfaceArea + 1
+
+        return surfaceArea
+
+    def Edge_Pieces_Of(self,robot):
+
+        [rows,columns,sheets] = robot.shape
+
+        edgePieces = 0
+
+        [columns,rows,sheets] = robot.shape
+
+        edgePieces = edgePieces + sum(sum(robot[0,:,:]))
+
+        edgePieces = edgePieces + sum(sum(robot[rows-1,:,:]))
+
+        edgePieces = edgePieces + sum(sum(robot[:,0,:]))
+
+        edgePieces = edgePieces + sum(sum(robot[:,columns-1,:]))
+
+        edgePieces = edgePieces + sum(sum(robot[:,:,0]))
+
+        edgePieces = edgePieces + sum(sum(robot[:,:,sheets-1]))
+
+        return edgePieces 
+
     def Evaluate_CPPNs(self,resolution):
 
         for cppn in self.cppns:
@@ -59,11 +107,19 @@ class AFPO:
 
             numComponents = self.cppns[cppn].Paint_At_Resolution(robot,resolution)
 
-            self.fitnesses[cppn] = numComponents
+            surfaceArea = self.Compute_Surface_Area_Of(robot)
+
+            penaltyForEdgePieces = -1 * self.Edge_Pieces_Of(robot)
+
+            self.fitnesses[cppn] = penaltyForEdgePieces + surfaceArea
+
+            if numComponents != 1:
+
+                self.fitnesses[cppn] = -1000000000
 
     def Find_Best_CPPN(self):
 
-        maxFitness = -1
+        maxFitness = -1000000000
         bestCPPN   = -1
 
         for cppn in self.cppns:

@@ -4,7 +4,7 @@ import math
 
 # --------- Evolution -------------------
 
-popSize = 100
+popSize = 10
 
 numGenerations = 1000 
 
