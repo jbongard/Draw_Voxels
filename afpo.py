@@ -15,15 +15,17 @@ class AFPO:
             self.cppns[cppn] = CPPN()
             self.fitnesses[cppn] = 0.0
 
-    def Evolve(self):
+    def Evolve_At_Resolution(self,resolution):
 
         for self.currentGeneration in range(c.numGenerations):
        
-            self.Perform_One_Generation()
+            self.Perform_One_Generation(resolution)
 
-    def Show_Best(self):
+    def Show_Best_At_Resolution(self,resolution):
 
-        self.cppns[0].Show()
+        bestCPPN = self.Find_Best_CPPN()
+
+        self.cppns[bestCPPN].Show_At_Resolution(resolution)
 
 # -------------------------- Private methods ----------------------
 
@@ -49,15 +51,29 @@ class AFPO:
 
             self.cppns[defender] = newCPPN
         
-    def Evaluate_CPPNs(self):
+    def Evaluate_CPPNs(self,resolution):
 
         for cppn in self.cppns:
 
-            robot = np.zeros([c.robotResolution,c.robotResolution,c.robotResolution],dtype='f')
+            robot = np.zeros([resolution,resolution,resolution],dtype='f')
 
-            numComponents = self.cppns[cppn].Paint(robot)
+            numComponents = self.cppns[cppn].Paint_At_Resolution(robot,resolution)
 
             self.fitnesses[cppn] = numComponents
+
+    def Find_Best_CPPN(self):
+
+        maxFitness = -1
+        bestCPPN   = -1
+
+        for cppn in self.cppns:
+
+            if self.fitnesses[cppn] > maxFitness:
+
+                maxFitness = self.fitnesses[cppn]
+                bestCPPN   = cppn
+
+        return bestCPPN 
 
     def Max_Fitness(self):
 
@@ -71,9 +87,9 @@ class AFPO:
 
         return maxFitness
 
-    def Perform_One_Generation(self):
+    def Perform_One_Generation(self,resolution):
 
-        self.Evaluate_CPPNs()
+        self.Evaluate_CPPNs(resolution)
 
         self.Print()
 
@@ -81,4 +97,20 @@ class AFPO:
 
     def Print(self):
 
-        print(self.currentGeneration,self.Max_Fitness())
+        print('Generation ', end='')
+
+        print(self.currentGeneration, end='')
+
+        print(' of ', end='')
+
+        print(str(c.numGenerations), end='')
+
+        print(': ', end='')
+
+        print(str(self.Max_Fitness()) + '   ', end='')
+
+        for cppn in self.cppns:
+
+            print( str(self.fitnesses[cppn]) + ' ' , end='')
+
+        print()

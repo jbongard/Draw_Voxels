@@ -51,16 +51,16 @@ class CPPN:
         else:
             self.Mutate_An_Activation_Function()
 
-    def Paint(self,robot):
+    def Paint_At_Resolution(self,robot,resolution):
 
         cols,rows,sheets = robot.shape
 
         for x in range(cols):
-            xScaled = self.Scale(x)
+            xScaled = self.Scale_Using_Resolution(x,resolution)
             for y in range(rows):
-                yScaled = self.Scale(y)
+                yScaled = self.Scale_Using_Resolution(y,resolution)
                 for z in range(sheets):
-                    zScaled = self.Scale(z)
+                    zScaled = self.Scale_Using_Resolution(z,resolution)
                     vals = self.Evaluate_At(xScaled,yScaled,zScaled)
 
                     if vals[0] > 0:
@@ -72,11 +72,11 @@ class CPPN:
 
         return numComponents
 
-    def Show(self):
+    def Show_At_Resolution(self,resolution):
 
-        robot = np.zeros([c.robotResolution,c.robotResolution,c.robotResolution],dtype='f')
+        robot = np.zeros([resolution,resolution,resolution],dtype='f')
 
-        self.Paint(robot)
+        self.Paint_At_Resolution(robot,resolution)
 
         facecolors = np.where(robot==2, 'salmon', 'lightgreen')
 
@@ -92,7 +92,7 @@ class CPPN:
 
     def Extract_Largest_Component(self,robot):
 
-        labelledRobot, num_labels = label(robot)
+        labelledRobot, num_labels = label(robot,structure=[[[1,1,1],[1,1,1],[1,1,1]],[[1,1,1],[1,1,1],[1,1,1]],[[1,1,1],[1,1,1],[1,1,1]]])
 
         return labelledRobot, np.amax(labelledRobot)
 
@@ -131,6 +131,8 @@ class CPPN:
         self.inputLayer[1] = y
 
         self.inputLayer[2] = z
+
+        self.inputLayer[3] = 1 # Bias
 
         self.hiddenLayer1 = np.dot( self.inputLayer   , self.IHWeights )
 
@@ -199,24 +201,10 @@ class CPPN:
 
         activeLayer[h] = c.cppnActivationFunctions[activationFunctionType]
 
-    def Remove_Smaller_Components(self,robot,numComponents):
-
-        cols,rows,sheets = robot.shape
-
-        for x in range(cols):
-            for y in range(rows):
-                for z in range(sheets):
-
-                    if robot[x,y,z] < numComponents:
-
-                        robot[x,y,z] = 0
-
-        print(robot)
-	
-    def Scale(self,OldValue):
+    def Scale_Using_Resolution(self,OldValue,resolution):
 
         OldMin = 0
-        OldMax = c.robotResolution - 1
+        OldMax = resolution - 1
 
         NewMin = -1.0
         NewMax = +1.0

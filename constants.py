@@ -6,23 +6,23 @@ import math
 
 popSize = 100
 
-numGenerations = 100
+numGenerations = 1000 
 
 # -------------- Robot ------------------
 
-robotResolution = 5 
+robotResolution = 10
 
 # ---------------- CPPN -----------------
 
-cppnInputs = 3 # x , y , z  
+cppnInputs = 4 # x , y , z , bias
 
 cppnHiddens = 3
 
 cppnOutputs = 1 # negative = no voxel; positive = voxel  
 
-cppnInitialMinWeight = -1.0
+cppnInitialMinWeight = -10.0
 
-cppnInitialMaxWeight = +1.0
+cppnInitialMaxWeight = +10.0
 
 cppnSinActFn = 0
 cppnAbsActFn = 1
