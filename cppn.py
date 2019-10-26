@@ -92,7 +92,7 @@ class CPPN:
 
     def Extract_Largest_Component(self,robot):
 
-        labelledRobot, num_labels = label(robot,structure=[[[1,1,1],[1,1,1],[1,1,1]],[[1,1,1],[1,1,1],[1,1,1]],[[1,1,1],[1,1,1],[1,1,1]]])
+        labelledRobot, num_labels = label(robot,structure=[[[0,0,0],[0,1,0],[0,0,0]],[[0,1,0],[1,1,1],[0,1,0]],[[0,0,0],[0,1,0],[0,0,0]]])
 
         return labelledRobot, np.amax(labelledRobot)
 
