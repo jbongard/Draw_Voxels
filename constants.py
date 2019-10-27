@@ -4,9 +4,9 @@ import math
 
 # --------- Evolution -------------------
 
-popSize = 10
+popSize = 100
 
-numGenerations = 1000 
+numGenerations = 200 # 1000
 
 # -------------- Robot ------------------
 
@@ -20,9 +20,9 @@ cppnHiddens = 3
 
 cppnOutputs = 1 # negative = no voxel; positive = voxel  
 
-cppnInitialMinWeight = -10.0
+cppnInitialMinWeight = -1.0
 
-cppnInitialMaxWeight = +10.0
+cppnInitialMaxWeight = +1.0
 
 cppnSinActFn = 0
 cppnAbsActFn = 1

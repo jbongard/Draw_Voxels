@@ -13,6 +13,10 @@ class CPPN:
 
     def __init__(self):
 
+        self.fitness      = 0.0
+
+        self.age          = 0
+
         self.inputLayer   = np.zeros(c.cppnInputs,dtype='f')
 
         self.IHWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [c.cppnInputs,c.cppnHiddens] )
@@ -43,6 +47,20 @@ class CPPN:
 
         self.outputLayer  = np.zeros(c.cppnOutputs,dtype='f')
 
+    def Compute_Fitness(self,robot):
+
+        surfaceArea = self.Compute_Surface_Area_Of(robot)
+
+        penaltyForEdgePieces = -1 * self.Edge_Pieces_Of(robot)
+
+        labelledRobot , numComponents = self.Extract_Largest_Component(robot)
+
+        if numComponents != 1:
+
+            self.fitness = -1000000000
+        else:
+            self.fitness = penaltyForEdgePieces + surfaceArea
+
     def Mutate(self):
 
         if np.random.randint(2) == 0:
@@ -68,9 +86,9 @@ class CPPN:
                     else:
                         robot[x,y,z] = 0
 
-        labelledRobot , numComponents = self.Extract_Largest_Component(robot)
+    def Print(self):
 
-        return numComponents
+        print(self.fitness,self.age)
 
     def Show_At_Resolution(self,resolution):
 
@@ -89,6 +107,54 @@ class CPPN:
         plt.show()
 
 # ---------------- Private methods -----------
+
+    def Compute_Surface_Area_Of(self,robot):
+
+        surfaceArea = 0
+
+        [rows,columns,sheets] = robot.shape
+
+        for row in range(0,rows-1):
+
+            for column in range(0,columns-1):
+
+                for sheet in range(0,sheets-1):
+
+                    if bool( robot[row,column,sheet] ) != bool( robot[row+1,column,sheet] ):
+
+                        surfaceArea = surfaceArea + 1
+
+                    if bool( robot[row,column,sheet] ) != bool( robot[row,column+1,sheet] ):
+
+                        surfaceArea = surfaceArea + 1
+
+                    if bool( robot[row,column,sheet] ) != bool( robot[row,column,sheet+1] ):
+
+                        surfaceArea = surfaceArea + 1
+
+        return surfaceArea
+
+    def Edge_Pieces_Of(self,robot):
+
+        [rows,columns,sheets] = robot.shape
+
+        edgePieces = 0
+
+        [columns,rows,sheets] = robot.shape
+
+        edgePieces = edgePieces + sum(sum(robot[0,:,:]))
+
+        edgePieces = edgePieces + sum(sum(robot[rows-1,:,:]))
+
+        edgePieces = edgePieces + sum(sum(robot[:,0,:]))
+
+        edgePieces = edgePieces + sum(sum(robot[:,columns-1,:]))
+
+        edgePieces = edgePieces + sum(sum(robot[:,:,0]))
+
+        edgePieces = edgePieces + sum(sum(robot[:,:,sheets-1]))
+
+        return edgePieces
 
     def Extract_Largest_Component(self,robot):
 
