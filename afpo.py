@@ -1,6 +1,7 @@
 import copy
 import constants as c
 import numpy as np
+import operator
 
 from cppn import CPPN
 
@@ -109,8 +110,8 @@ class AFPO:
 
         print(': ', end='')
 
-        for cppn in self.cppns:
+        for cppn in (sorted(self.cppns.values(), key=operator.attrgetter('fitness'))):
 
-            self.cppns[cppn].Print()
+            print(cppn.fitness)
 
         print()
