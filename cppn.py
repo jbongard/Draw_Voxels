@@ -11,7 +11,9 @@ from scipy.ndimage import label
 
 class CPPN: 
 
-    def __init__(self):
+    def __init__(self,ID):
+
+        self.Set_ID(ID)
 
         self.fitness      = c.worstFitness
 
@@ -73,17 +75,21 @@ class CPPN:
 
                 equalFitnesses = self.Get_Fitness() == other.Get_Fitness()
 
-                equalAges      = self.Get_Age() == self.Get_Age()
+                equalAges      = self.Get_Age()     == other.Get_Age()
 
                 if not equalFitnesses and equalAges:
 
                     return True
                 else:
-                    return False
+                    return self.Is_Newer_Than(other) 
             else:
                 return False
         else:
             return False
+
+    def Get_ID(self):
+
+        return self.ID
 
     def Mutate(self):
 
@@ -113,6 +119,10 @@ class CPPN:
     def Print(self):
 
         print(self.fitness,self.age)
+
+    def Set_ID(self,ID):
+
+        self.ID = ID
 
     def Show_At_Resolution(self,resolution):
 
@@ -254,6 +264,10 @@ class CPPN:
     def Gaussian(self,x):
 
         return np.exp( -x**2 / 2.0 )
+
+    def Is_Newer_Than(self,other):
+
+        return self.Get_ID() > other.Get_ID()
 
     def Mutate_A_Weight(self):
 

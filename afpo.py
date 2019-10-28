@@ -9,16 +9,23 @@ class AFPO:
 
     def __init__(self):
 
+        self.nextAvailableID = 0
+
         self.cppns = {}
-        self.fitnesses = {}
 
         for cppn in range(c.popSize):
-            self.cppns[cppn] = CPPN()
-            self.fitnesses[cppn] = 0.0
+
+            self.cppns[cppn] = CPPN(self.nextAvailableID)
+
+            self.nextAvailableID = self.nextAvailableID + 1
 
     def Evolve_At_Resolution(self,resolution):
 
-        for self.currentGeneration in range(c.numGenerations):
+        self.currentGeneration = 0
+
+        self.Perform_First_Generation(resolution)
+
+        for self.currentGeneration in range(1,c.numGenerations):
        
             self.Perform_One_Generation(resolution)
 
@@ -26,7 +33,7 @@ class AFPO:
 
         bestCPPN = self.Find_Best_CPPN()
 
-        self.cppns[bestCPPN].Show_At_Resolution(resolution)
+        bestCPPN.Show_At_Resolution(resolution)
 
 # -------------------------- Private methods ----------------------
 
@@ -92,37 +99,41 @@ class AFPO:
 
             self.cppns[newCPPN] = copy.deepcopy( self.cppns[spawner] )
 
+            self.cppns[newCPPN].Set_ID(self.nextAvailableID)
+
+            self.nextAvailableID = self.nextAvailableID + 1
+
             self.cppns[newCPPN].Mutate()
+
+    def Find_Best_CPPN(self):
+
+        CPPNsSortedByFitness = sorted(self.cppns.values(), key=operator.attrgetter('fitness'),reverse=True)
+
+        return CPPNsSortedByFitness[0]
 
     def Inject(self):
 
         popSize = len(self.cppns)
 
-        self.cppns[popSize-1] = CPPN()
+        self.cppns[popSize-1] = CPPN(self.nextAvailableID)
 
-    def Max_Fitness(self):
+        self.nextAvailableID = self.nextAvailableID + 1
 
-        maxFitness = -1
-
-        for cppn in self.cppns:
-
-            if self.fitnesses[cppn] > maxFitness:
-
-                maxFitness = self.fitnesses[cppn]
-
-        return maxFitness
-
-    def Perform_One_Generation(self,resolution):
+    def Perform_First_Generation(self,resolution):
 
         self.Evaluate_CPPNs(resolution)
 
         self.Print()
+
+    def Perform_One_Generation(self,resolution):
 
         self.Expand()
 
         self.Age()
 
         self.Inject()
+
+        self.Evaluate_CPPNs(resolution)
 
         self.Contract()
 
@@ -142,7 +153,7 @@ class AFPO:
 
         k = 0
 
-        for cppn in (sorted(self.cppns.values(), key=operator.attrgetter('fitness'),reverse=True)):
+        for cppn in sorted(self.cppns.values(), key=operator.attrgetter('fitness'),reverse=True):
 
             print(k, cppn.Get_Fitness() , cppn.Get_Age())
 

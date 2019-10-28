@@ -4,9 +4,9 @@ import math
 
 # --------- Evolution -------------------
 
-popSize = 100
+popSize = 50
 
-numGenerations = 200 # 1000
+numGenerations = 1000
 
 worstFitness = -1000000
 
