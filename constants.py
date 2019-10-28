@@ -8,6 +8,8 @@ popSize = 100
 
 numGenerations = 200 # 1000
 
+worstFitness = -1000000
+
 # -------------- Robot ------------------
 
 robotResolution = 10

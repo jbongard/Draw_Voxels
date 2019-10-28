@@ -54,24 +54,24 @@ class AFPO:
 
         return defender
 
-    def Compete_CPPNs(self):
+    def Contract(self):
 
-        aggressor = np.random.randint(c.popSize)
+        while len(self.cppns) > c.popSize:
 
-        defender = np.random.randint(c.popSize)
+            aggressorDominatesDefender = False
 
-        while defender == aggressor:
+            while not aggressorDominatesDefender:
 
-            defender = np.random.randint(c.popSize)
+                aggressor = self.Choose_Aggressor()
 
-        if self.Aggressor_Dominates_Defender(aggressor,defender):
+                defender  = self.Choose_Defender(aggressor)
 
-            newCPPN = copy.deepcopy( self.cppns[aggressor] )
+                aggressorDominatesDefender = self.Aggressor_Dominates_Defender(aggressor,defender)
 
-            newCPPN.Mutate()
+            for cppnToMove in range(defender,len(self.cppns)-1):
 
-            self.cppns[defender] = newCPPN
-       
+                self.cppns[cppnToMove] = self.cppns.pop(cppnToMove+1)
+
     def Evaluate_CPPNs(self,resolution):
 
         for cppn in self.cppns:
@@ -86,7 +86,7 @@ class AFPO:
 
         popSize = len(self.cppns)
 
-        for newCPPN in range(popSize,2*popSize):
+        for newCPPN in range( popSize , 2 * popSize - 1 ):
 
             spawner = self.Choose_Aggressor()
 
@@ -94,31 +94,11 @@ class AFPO:
 
             self.cppns[newCPPN].Mutate()
 
-            #aggressorDominatesDefender = False 
+    def Inject(self):
 
-            #while not aggressorDominatesDefender: 
+        popSize = len(self.cppns)
 
-            #    aggressor = self.Choose_Aggressor()
-
-            #    defender  = self.Choose_Defender(aggressor)
-
-            #    aggressorDominatesDefender = self.Aggressor_Dominates_Defender(aggressor,defender)
- 
-            # print(newCPPN,aggressor,defender)
-
-    def Find_Best_CPPN(self):
-
-        maxFitness = -1000000000
-        bestCPPN   = -1
-
-        for cppn in self.cppns:
-
-            if self.fitnesses[cppn] > maxFitness:
-
-                maxFitness = self.fitnesses[cppn]
-                bestCPPN   = cppn
-
-        return bestCPPN 
+        self.cppns[popSize-1] = CPPN()
 
     def Max_Fitness(self):
 
@@ -144,12 +124,9 @@ class AFPO:
 
         self.Inject()
 
-        self.Print()
-        exit()
-
         self.Contract()
 
-        # self.Compete_CPPNs()
+        self.Print()
 
     def Print(self):
 
@@ -161,10 +138,14 @@ class AFPO:
 
         print(str(c.numGenerations), end='')
 
-        print(': ', end='')
+        print('.')
+
+        k = 0
 
         for cppn in (sorted(self.cppns.values(), key=operator.attrgetter('fitness'),reverse=True)):
 
-            print(cppn.Get_Fitness() , cppn.Get_Age())
+            print(k, cppn.Get_Fitness() , cppn.Get_Age())
+
+            k = k + 1
 
         print()

@@ -13,7 +13,7 @@ class CPPN:
 
     def __init__(self):
 
-        self.fitness      = 0.0
+        self.fitness      = c.worstFitness
 
         self.age          = 0
 
@@ -61,7 +61,7 @@ class CPPN:
 
         if numComponents != 1:
 
-            self.fitness = -1000000000
+            self.fitness = c.worstFitness 
         else:
             self.fitness = penaltyForEdgePieces + surfaceArea
 
