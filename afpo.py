@@ -149,14 +149,16 @@ class AFPO:
 
         print(str(c.numGenerations), end='')
 
-        print('.')
+        print(': ', end='')
 
-        k = 0
+        bestCPPN = self.Find_Best_CPPN()
 
-        for cppn in sorted(self.cppns.values(), key=operator.attrgetter('fitness'),reverse=True):
+        print( str( round(bestCPPN.Get_Fitness()) ) + ' \t' , end = '' )
 
-            print(k, cppn.Get_Fitness() , cppn.Get_Age())
+        print( str( round(bestCPPN.Get_Age()) ) )
 
-            k = k + 1
-
-        print()
+        #k = 0
+        #for cppn in sorted(self.cppns.values(), key=operator.attrgetter('fitness'),reverse=True):
+        #    print(k, cppn.Get_Fitness() , cppn.Get_Age())
+        #    k = k + 1
+        #print()

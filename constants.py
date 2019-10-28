@@ -6,13 +6,13 @@ import math
 
 popSize = 50
 
-numGenerations = 10 # 200 #0
+numGenerations = 200 #0
 
 worstFitness = -1000000
 
 # -------------- Robot ------------------
 
-robotResolution = 6
+robotResolution = 2 * 4 # Must be even
 
 # ---------------- CPPN -----------------
 

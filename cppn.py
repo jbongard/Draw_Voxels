@@ -59,7 +59,7 @@ class CPPN:
 
         symmetryScore = self.Compute_Symmetry(robot)
 
-        penaltyForEdgePieces = -1 * self.Edge_Pieces_Of(robot)
+        numEdgePieces = self.Edge_Pieces_Of(robot)
 
         labelledRobot , numComponents = self.Extract_Largest_Component(robot)
 
@@ -67,7 +67,7 @@ class CPPN:
 
             self.fitness = c.worstFitness 
         else:
-            self.fitness = symmetryScore # penaltyForEdgePieces + surfaceArea
+            self.fitness = symmetryScore * surfaceArea * ( 1 / (1 + numEdgePieces) ) # penaltyForEdgePieces + surfaceArea
 
     def Dominates(self,other):
 
@@ -176,7 +176,7 @@ class CPPN:
 
         rightHalf = robot[ : , int(c.robotResolution/2) :       , : ] 
 
-        flippedRightHalf = np.flip(rightHalf)
+        flippedRightHalf = np.flip( rightHalf , axis = 1 )
 
         matchingVoxels = leftHalf == flippedRightHalf
 
