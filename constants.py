@@ -6,7 +6,7 @@ import math
 
 popSize = 50
 
-numGenerations = 1000
+numGenerations = 100 #0
 
 worstFitness = -1000000
 
@@ -16,15 +16,15 @@ robotResolution = 10
 
 # ---------------- CPPN -----------------
 
-cppnInputs = 4 # x , y , z , bias
+cppnInputs = 5 # x , y , z , d , bias
 
 cppnHiddens = 3
 
 cppnOutputs = 1 # negative = no voxel; positive = voxel  
 
-cppnInitialMinWeight = -1.0
+cppnInitialMinWeight = -10.0
 
-cppnInitialMaxWeight = +1.0
+cppnInitialMaxWeight = +10.0
 
 cppnSinActFn = 0
 cppnAbsActFn = 1

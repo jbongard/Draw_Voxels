@@ -240,7 +240,9 @@ class CPPN:
 
         self.inputLayer[2] = z
 
-        self.inputLayer[3] = 1 # Bias
+        self.inputLayer[3] = math.sqrt( x**2 + y**2 + z**2 )
+
+        self.inputLayer[4] = 1 # Bias
 
         self.hiddenLayer1 = np.dot( self.inputLayer   , self.IHWeights )
 
