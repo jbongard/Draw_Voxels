@@ -47,6 +47,10 @@ class CPPN:
 
         self.outputLayer  = np.zeros(c.cppnOutputs,dtype='f')
 
+    def Age(self):
+
+        self.age = self.age + 1
+
     def Compute_Fitness(self,robot):
 
         surfaceArea = self.Compute_Surface_Area_Of(robot)
@@ -60,6 +64,26 @@ class CPPN:
             self.fitness = -1000000000
         else:
             self.fitness = penaltyForEdgePieces + surfaceArea
+
+    def Dominates(self,other):
+
+        if self.Get_Fitness() >= other.Get_Fitness():
+
+            if self.Get_Age() <= other.Get_Age():
+
+                equalFitnesses = self.Get_Fitness() == other.Get_Fitness()
+
+                equalAges      = self.Get_Age() == self.Get_Age()
+
+                if not equalFitnesses and equalAges:
+
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
 
     def Mutate(self):
 
@@ -170,6 +194,10 @@ class CPPN:
 
         return action 
 
+    def Get_Age(self):
+
+        return self.age
+
     def Get_DeltaX_From_Outputs(self,outputs):
 
         # return outputs[c.numEdgeChangeActions]
@@ -189,6 +217,10 @@ class CPPN:
         minusDeltaYToDeltaY = minusOneToOne * c.vectorFieldYDeltaMax
 
         return minusDeltaYToDeltaY
+
+    def Get_Fitness(self):
+
+        return self.fitness
 
     def Evaluate_At(self,x,y,z):
 
