@@ -2,11 +2,17 @@ import numpy as np
 
 import math
 
+# ------------- Words -------------------
+
+words = ["jump", "walk", "roll", "twist"]
+
+numWords = len(words)
+
 # --------- Evolution -------------------
 
 popSize = 50
 
-numGenerations = 2 # 000
+numGenerations = 100 # 000
 
 worstFitness = -1000000
 
@@ -25,6 +31,10 @@ cppnOutputs = 1 # negative = no voxel; positive = voxel
 cppnInitialMinWeight = -10.0
 
 cppnInitialMaxWeight = +10.0
+
+cppnInitialMinW2VWeight = cppnInitialMinWeight / 100.0
+
+cppnInitialMaxW2VWeight = cppnInitialMaxWeight / 100.0
 
 cppnSinActFn = 0
 cppnAbsActFn = 1

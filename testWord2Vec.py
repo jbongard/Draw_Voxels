@@ -8,7 +8,7 @@ word2vecVectorSpace = Word2VecVectorSpace(database_file='/Users/jbongard/Dropbox
 
 word = "jump"
 vec = word2vecVectorSpace.get_vector( word )
-print(vec)
+print(len(vec),vec)
 
 word = "twist"
 vec = word2vecVectorSpace.get_vector( word )

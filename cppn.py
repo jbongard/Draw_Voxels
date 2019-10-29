@@ -6,6 +6,10 @@ import numpy as np
 import pickle
 from   scipy.ndimage import label
 
+import sys
+sys.path.insert(0, "/Users/jbongard/Dropbox/JoshBongard/0_Code/TPR_3")
+from database.word2vecDatabase import Word2VecVectorSpace
+
 class CPPN: 
 
     def __init__(self,ID):
@@ -45,6 +49,20 @@ class CPPN:
         self.HOWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [c.cppnHiddens,c.cppnOutputs] )
 
         self.outputLayer  = np.zeros(c.cppnOutputs,dtype='f')
+
+    def Add_W2V_Weights(self):
+
+        self.word2vecVectorSpace = Word2VecVectorSpace(database_file='/Users/jbongard/Dropbox/JoshBongard/0_Code/TPR_3/database/w2vVectorSpace-google.db')
+
+        word = "jump"
+
+        vec = self.word2vecVectorSpace.get_vector( word )
+
+        self.w2vLength = len(vec)
+
+        self.v1HWeights = np.random.uniform( c.cppnInitialMinW2VWeight , c.cppnInitialMaxW2VWeight , [self.w2vLength,c.cppnHiddens] )
+
+        self.v2HWeights = np.random.uniform( c.cppnInitialMinW2VWeight , c.cppnInitialMaxW2VWeight , [self.w2vLength,c.cppnHiddens] )
 
     def Age(self):
 
@@ -100,6 +118,14 @@ class CPPN:
 
     def Paint_At_Resolution(self,robot,resolution):
 
+        self.Paint_At_Resolution_With_Words(robot,resolution,"","")
+
+    def Paint_At_Resolution_With_Word(self,robot,resolution,word):
+
+        self.Paint_At_Resolution_With_Words(self,robot,resolution,word,"")
+
+    def Paint_At_Resolution_With_Words(self,robot,resolution,word1,word2):
+
         cols,rows,sheets = robot.shape
 
         for x in range(cols):
@@ -108,7 +134,7 @@ class CPPN:
                 yScaled = self.Scale_Using_Resolution(y,resolution)
                 for z in range(sheets):
                     zScaled = self.Scale_Using_Resolution(z,resolution)
-                    vals = self.Evaluate_At(xScaled,yScaled,zScaled)
+                    vals = self.Evaluate_At_With_Words(xScaled,yScaled,zScaled,word1,word2)
 
                     if vals[0] > 0:
                         robot[x,y,z] = 1
@@ -128,21 +154,37 @@ class CPPN:
         pickle.dump( self , open( "data/cppn.p", "wb" ) )
 
         
-    def Show_At_Resolution(self,resolution):
+    def Show_At_Resolution(self,resolution,fig):
+
+        self.Show_At_Resolution_With_Words_In_Figure(resolution,"","",fig,1)
+
+    def Show_At_Resolution_With_Word_In_Figure(self,resolution,word,fig,panelNumber):
+
+        self.Show_At_Resolution_With_Word_In_Figure(resolution,word,"",fig,panelNumber)
+        
+    def Show_At_Resolution_With_Words_In_Figure(self,resolution,word1,word2,fig,panelNumber):
 
         robot = np.zeros([resolution,resolution,resolution],dtype='f')
 
-        self.Paint_At_Resolution(robot,resolution)
+        self.Paint_At_Resolution_With_Words(robot,resolution,word1,word2)
 
         facecolors = np.where(robot==2, 'salmon', 'lightgreen')
 
-        fig = plt.figure()
+        ax = fig.add_subplot(c.numWords, c.numWords, panelNumber, projection='3d')
 
-        ax = fig.gca(projection='3d')
+        if panelNumber <= c.numWords:
+
+            ax.set_title('"' + word2 + '"')
+
+        if panelNumber % c.numWords == 1 :
+
+            ax.set_zlabel('Z axis')
 
         ax.voxels(robot, facecolors=facecolors , edgecolors = 'k')
 
-        plt.show()
+        ax.set_aspect('equal')
+
+        ax.set_axis_off()
 
 # ---------------- Private methods -----------
 
@@ -250,7 +292,11 @@ class CPPN:
 
         return self.fitness
 
-    def Evaluate_At(self,x,y,z):
+    def Evaluate_At_With_Word(self,x,y,z,word):
+
+        self.Evaluate_At_With_Words(x,y,z,word,"")
+
+    def Evaluate_At_With_Words(self,x,y,z,word1,word2):
 
         self.inputLayer[0] = x
 
@@ -263,6 +309,18 @@ class CPPN:
         self.inputLayer[4] = 1 # Bias
 
         self.hiddenLayer1 = np.dot( self.inputLayer   , self.IHWeights )
+
+        if word1 != "":
+
+            vec = self.word2vecVectorSpace.get_vector( word1 )
+
+            self.hiddenLayer1 = self.hiddenLayer1 + np.dot( vec   , self.v1HWeights )
+
+        if word2 != "":
+
+            vec = self.word2vecVectorSpace.get_vector( word2 )
+
+            self.hiddenLayer1 = self.hiddenLayer1 + np.dot( vec   , self.v2HWeights )
 
         for h in range(c.cppnHiddens):
 

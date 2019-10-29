@@ -1,5 +1,6 @@
 import copy
 import constants as c
+import matplotlib.pyplot as plt
 import numpy as np
 import operator
 
@@ -39,7 +40,9 @@ class AFPO:
 
         bestCPPN = self.Find_Best_CPPN()
 
-        bestCPPN.Show_At_Resolution(resolution)
+        fig = plt.figure(1)
+
+        bestCPPN.Show_At_Resolution(resolution,fig)
 
 # -------------------------- Private methods ----------------------
 
