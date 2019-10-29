@@ -1,13 +1,10 @@
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
-
+from   mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
 import constants as c
-
 import math
-
 import numpy as np
-
-from scipy.ndimage import label
+import pickle
+from   scipy.ndimage import label
 
 class CPPN: 
 
@@ -126,6 +123,11 @@ class CPPN:
 
         self.ID = ID
 
+    def Save(self):
+
+        pickle.dump( self , open( "data/cppn.p", "wb" ) )
+
+        
     def Show_At_Resolution(self,resolution):
 
         robot = np.zeros([resolution,resolution,resolution],dtype='f')

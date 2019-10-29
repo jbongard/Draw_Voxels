@@ -29,6 +29,12 @@ class AFPO:
        
             self.Perform_One_Generation(resolution)
 
+    def Save_Best(self):
+
+        bestCPPN = self.Find_Best_CPPN()
+
+        bestCPPN.Save()
+
     def Show_Best_At_Resolution(self,resolution):
 
         bestCPPN = self.Find_Best_CPPN()

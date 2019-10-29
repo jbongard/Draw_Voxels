@@ -8,4 +8,7 @@ afpo.Evolve_At_Resolution(c.robotResolution)
 
 afpo.Show_Best_At_Resolution(c.robotResolution)
 
-afpo.Show_Best_At_Resolution(20)
+#afpo.Show_Best_At_Resolution(20)
+
+afpo.Save_Best()
+
