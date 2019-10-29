@@ -4,7 +4,7 @@ import math
 
 # ------------- Words -------------------
 
-words = ["jump", "walk", "roll", "twist"]
+words = ["jump", "walk", "cover", "surround"]
 
 numWords = len(words)
 
@@ -12,7 +12,7 @@ numWords = len(words)
 
 popSize = 50
 
-numGenerations = 100 # 000
+numGenerations = 2 # 000
 
 worstFitness = -1000000
 
@@ -26,7 +26,7 @@ cppnInputs = 5 # x , y , z , d , bias
 
 cppnHiddens = 3
 
-cppnOutputs = 1 # negative = no voxel; positive = voxel  
+cppnOutputs = 2 # neg/pos = absent/present neg/pos = phase=0/phase=pi 
 
 cppnInitialMinWeight = -10.0
 

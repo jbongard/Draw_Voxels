@@ -141,6 +141,13 @@ class CPPN:
                     else:
                         robot[x,y,z] = 0
 
+                    if vals[1] > 0 and robot[x,y,z]==1:
+
+                        robot[x,y,z] = 2
+
+        print(robot)
+        exit()
+
     def Print(self):
 
         print(self.fitness,self.age)
