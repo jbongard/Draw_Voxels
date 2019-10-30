@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from   mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
 import constants as c
+import itertools
 import math
 import numpy as np
 import pickle
@@ -172,7 +173,10 @@ class CPPN:
 
         self.Paint_At_Resolution_With_Words(robot,resolution,word1,word2)
 
-        facecolors = np.where(robot==2, 'salmon', 'lightgreen')
+        #facecolors = np.where(robot==2, 'salmon', 'lightgreen')
+        facecolors = np.where(robot==2, 'red', 'green')
+
+        #edgecolors = np.where(robot==2, 'salmon', 'lightgreen')
 
         ax = fig.add_subplot(c.numWords, c.numWords, panelNumber, projection='3d')
 
@@ -184,7 +188,8 @@ class CPPN:
 
             ax.set_zlabel('Z axis')
 
-        ax.voxels(robot, facecolors=facecolors , edgecolors = 'k')
+        self.plotMatrix(ax,robot)
+        #ax.voxels(robot, facecolors=facecolors , edgecolors = 'k') # edgecolors)
 
         ax.set_aspect('equal')
 
@@ -231,6 +236,28 @@ class CPPN:
         numMatchingVoxels = sum(sum(sum(matchingVoxels)))
 
         return numMatchingVoxels
+
+    def cuboid_data(self, pos, size=(1,1,1)):
+        # code taken from
+        # https://stackoverflow.com/a/35978146/4124317
+        # suppose axis direction: x: to left; y: to inside; z: to upper
+        # get the (left, outside, bottom) point
+        o = [a - b / 2 for a, b in zip(pos, size)]
+        # get the length, width, and height
+        l, w, h = size
+        x = [[o[0], o[0] + l, o[0] + l, o[0], o[0]],  
+             [o[0], o[0] + l, o[0] + l, o[0], o[0]],  
+             [o[0], o[0] + l, o[0] + l, o[0], o[0]],  
+             [o[0], o[0] + l, o[0] + l, o[0], o[0]]]  
+        y = [[o[1], o[1], o[1] + w, o[1] + w, o[1]],  
+             [o[1], o[1], o[1] + w, o[1] + w, o[1]],  
+             [o[1], o[1], o[1], o[1], o[1]],          
+             [o[1] + w, o[1] + w, o[1] + w, o[1] + w, o[1] + w]]   
+        z = [[o[2], o[2], o[2], o[2], o[2]],                       
+             [o[2] + h, o[2] + h, o[2] + h, o[2] + h, o[2] + h],   
+             [o[2], o[2], o[2] + h, o[2] + h, o[2]],               
+             [o[2], o[2], o[2] + h, o[2] + h, o[2]]]               
+        return np.array(x), np.array(y), np.array(z)
 
     def Edge_Pieces_Of(self,robot):
 
@@ -394,6 +421,26 @@ class CPPN:
         activationFunctionType = np.random.randint(c.numCPPNActivationFunctions)
 
         activeLayer[h] = c.cppnActivationFunctions[activationFunctionType]
+
+    def plotCubeAt(self,pos=(0,0,0),ax=None,voxelType=1):
+        # Plotting a cube element at position pos
+        if ax !=None:
+            X, Y, Z = self.cuboid_data( pos )
+
+            if voxelType == 1:
+                 ax.plot_surface(X, Y, Z, color='lightgreen', rstride=1, cstride=1, alpha=1)
+            else:
+                 ax.plot_surface(X, Y, Z, color='salmon', rstride=1, cstride=1, alpha=1)
+
+
+    def plotMatrix(self, ax, matrix):
+        # plot a Matrix 
+        for i in range(matrix.shape[0]):
+            for j in range(matrix.shape[1]):
+                for k in range(matrix.shape[2]):
+                    if matrix[i,j,k] > 0:
+                        # to have the 
+                        self.plotCubeAt(pos=(i-0.5,j-0.5,k-0.5), ax=ax, voxelType=matrix[i,j,k])
 
     def Scale_Using_Resolution(self,OldValue,resolution):
 

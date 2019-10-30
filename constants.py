@@ -12,13 +12,13 @@ numWords = len(words)
 
 popSize = 50
 
-numGenerations = 2 # 000
+numGenerations = 1000
 
 worstFitness = -1000000
 
 # -------------- Robot ------------------
 
-robotResolution = 2 * 3 # Must be even
+robotResolution = 2 * 2 # Must be even
 
 # ---------------- CPPN -----------------
 
