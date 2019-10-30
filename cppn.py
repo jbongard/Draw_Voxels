@@ -153,9 +153,9 @@ class CPPN:
 
         self.ID = ID
 
-    def Save(self):
+    def Save(self,randomSeed):
 
-        pickle.dump( self , open( "data/cppn.p", "wb" ) )
+        pickle.dump( self , open( "data/cppn"+str(randomSeed)+".p", "wb" ) )
 
         
     def Show_At_Resolution(self,resolution,fig):

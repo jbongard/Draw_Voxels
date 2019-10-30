@@ -1,8 +1,13 @@
 import constants as c
 import matplotlib.pyplot as plt
 import pickle
+import sys
 
-cppn = pickle.load( open( "data/cppn.p", "rb" ) )
+arguments = len(sys.argv) - 1
+
+randomSeed = int(sys.argv[arguments])
+
+cppn = pickle.load( open( "data/cppn"+str(randomSeed)+".p", "rb" ) )
 
 cppn.Add_W2V_Weights()
 

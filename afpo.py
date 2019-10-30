@@ -8,7 +8,9 @@ from cppn import CPPN
 
 class AFPO:
 
-    def __init__(self):
+    def __init__(self,randomSeed):
+
+        self.randomSeed = randomSeed
 
         self.nextAvailableID = 0
 
@@ -34,7 +36,7 @@ class AFPO:
 
         bestCPPN = self.Find_Best_CPPN()
 
-        bestCPPN.Save()
+        bestCPPN.Save(self.randomSeed)
 
     def Show_Best_At_Resolution(self,resolution):
 
@@ -134,6 +136,8 @@ class AFPO:
 
         self.Print()
 
+        self.Save_Best()
+
     def Perform_One_Generation(self,resolution):
 
         self.Expand()
@@ -147,6 +151,8 @@ class AFPO:
         self.Contract()
 
         self.Print()
+
+        self.Save_Best()
 
     def Print(self):
 
