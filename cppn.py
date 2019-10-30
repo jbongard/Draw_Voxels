@@ -145,9 +145,6 @@ class CPPN:
 
                         robot[x,y,z] = 2
 
-        print(robot)
-        exit()
-
     def Print(self):
 
         print(self.fitness,self.age)

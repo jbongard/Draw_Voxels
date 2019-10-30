@@ -4,7 +4,7 @@ import math
 
 # ------------- Words -------------------
 
-words = ["jump", "walk", "cover", "surround"]
+words = ["jump", "walk", "grab", "encompass"]
 
 numWords = len(words)
 
