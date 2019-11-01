@@ -18,7 +18,7 @@ worstFitness = -1000000
 
 # -------------- Robot ------------------
 
-robotResolution = 2 * 2 # Must be even
+robotResolution = 2 * 5 # Must be even
 
 # ---------------- CPPN -----------------
 
@@ -28,13 +28,13 @@ cppnHiddens = 3
 
 cppnOutputs = 2 # neg/pos = absent/present neg/pos = phase=0/phase=pi 
 
-cppnInitialMinWeight = -10.0
+cppnInitialMinWeight = -1.0
 
-cppnInitialMaxWeight = +10.0
+cppnInitialMaxWeight = +1.0
 
-cppnInitialMinW2VWeight = 0.0 # cppnInitialMinWeight / 10.0
+cppnInitialMinW2VWeight = cppnInitialMinWeight / 10.0
 
-cppnInitialMaxW2VWeight = 0.0 # cppnInitialMaxWeight / 10.0
+cppnInitialMaxW2VWeight = cppnInitialMaxWeight / 10.0
 
 cppnSinActFn = 0
 cppnAbsActFn = 1

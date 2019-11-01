@@ -73,19 +73,21 @@ class CPPN:
 
     def Compute_Fitness(self,robot):
 
-        surfaceArea = self.Compute_Surface_Area_Of(robot)
+        # surfaceArea = self.Compute_Surface_Area_Of(robot)
 
         symmetryScore = self.Compute_Symmetry(robot)
 
-        shapeComplexity = self.Shape_Complexity_Of(robot)
+        # shapeComplexity = self.Shape_Complexity_Of(robot)
 
-        numEdgePieces = self.Edge_Pieces_Of(robot)
+        # numEdgePieces = self.Edge_Pieces_Of(robot)
+
+        gapReward = self.Gap_Reward(robot)
 
         labelledRobot , numComponents = self.Extract_Largest_Component(robot)
 
         onlyOneComponent = numComponents == 1
 
-        self.fitness = onlyOneComponent * symmetryScore * shapeComplexity # * surfaceArea * ( 1 / (1 + numEdgePieces) )
+        self.fitness = onlyOneComponent * gapReward # * symmetryScore * ( 1 / (1 + numEdgePieces) )
 
     def Dominates(self,other):
 
@@ -201,29 +203,23 @@ class CPPN:
 
     def Compute_Surface_Area_Of(self,robot):
 
-        surfaceArea = 0
+        pairwiseDiffs = 0
 
         [rows,columns,sheets] = robot.shape
 
-        for row in range(0,rows-1):
+        robot1 = robot[0:rows-1 , 0:columns   , 0:sheets  ]
+        robot2 = robot[1:rows   , 0:columns   , 0:sheets  ]
+        pairwiseDiffs = pairwiseDiffs + sum(sum(sum(robot1 != robot2)))
 
-            for column in range(0,columns-1):
+        robot1 = robot[0:rows   , 0:columns-1 , 0:sheets  ]
+        robot2 = robot[0:rows   , 1:columns   , 0:sheets  ]
+        pairwiseDiffs = pairwiseDiffs + sum(sum(sum(robot1 != robot2)))
 
-                for sheet in range(0,sheets-1):
+        robot1 = robot[0:rows   , 0:columns   , 0:sheets-1]
+        robot2 = robot[0:rows   , 0:columns   , 1:sheets  ]
+        pairwiseDiffs = pairwiseDiffs + sum(sum(sum(robot1 != robot2)))
 
-                    if bool( robot[row,column,sheet] ) != bool( robot[row+1,column,sheet] ):
-
-                        surfaceArea = surfaceArea + 1
-
-                    if bool( robot[row,column,sheet] ) != bool( robot[row,column+1,sheet] ):
-
-                        surfaceArea = surfaceArea + 1
-
-                    if bool( robot[row,column,sheet] ) != bool( robot[row,column,sheet+1] ):
-
-                        surfaceArea = surfaceArea + 1
-
-        return surfaceArea
+        return pairwiseDiffs 
 
     def Compute_Symmetry(self,robot):
 
@@ -378,6 +374,86 @@ class CPPN:
 
         return self.outputLayer 
 
+    def Gap_Dim_0(self,robot):
+
+        otherDimPos1 = np.random.randint(c.robotResolution)
+        otherDimPos2 = np.random.randint(c.robotResolution)
+
+        pos1 = np.random.randint(0 , c.robotResolution - 2)
+
+        pos2 = np.random.randint( pos1 + 2 , c.robotResolution )
+
+        pos1Occupied = robot[pos1,otherDimPos1,otherDimPos2] > 0
+
+        pos2Occupied = robot[pos2,otherDimPos1,otherDimPos2] > 0
+
+        clearBetween = sum( robot[pos1+1:pos2,otherDimPos1,otherDimPos2] ) == 0
+
+        distBetween = pos2 - pos1 - 1
+
+        gapExists = pos1Occupied and pos2Occupied and clearBetween
+
+        return gapExists * distBetween
+
+    def Gap_Dim_1(self,robot):
+
+        otherDimPos1 = np.random.randint(c.robotResolution)
+        otherDimPos2 = np.random.randint(c.robotResolution)
+
+        pos1 = np.random.randint(0 , c.robotResolution - 2)
+
+        pos2 = np.random.randint( pos1 + 2 , c.robotResolution )
+
+        pos1Occupied = robot[otherDimPos1,pos1,otherDimPos2] > 0
+
+        pos2Occupied = robot[otherDimPos1,pos2,otherDimPos2] > 0
+
+        clearBetween = sum( robot[otherDimPos1,pos1+1:pos2,otherDimPos2] ) == 0
+
+        distBetween = pos2 - pos1 - 1
+
+        gapExists = pos1Occupied and pos2Occupied and clearBetween
+
+        return gapExists * distBetween
+
+    def Gap_Dim_2(self,robot):
+
+        otherDimPos1 = np.random.randint(c.robotResolution)
+        otherDimPos2 = np.random.randint(c.robotResolution)
+
+        pos1 = np.random.randint(0 , c.robotResolution - 2)
+
+        pos2 = np.random.randint( pos1 + 2 , c.robotResolution )
+    
+        pos1Occupied = robot[otherDimPos1,otherDimPos2,pos1] > 0
+
+        pos2Occupied = robot[otherDimPos1,otherDimPos2,pos2] > 0
+
+        clearBetween = sum( robot[otherDimPos1,otherDimPos2,pos1+1:pos2] ) == 0
+
+        distBetween = pos2 - pos1 - 1
+
+        gapExists = pos1Occupied and pos2Occupied and clearBetween
+
+        return gapExists * distBetween
+
+    def Gap_Reward(self,robot):
+
+        gapReward = 0
+
+        for i in range(10000):
+
+            dim  = np.random.randint(3)
+
+            if dim==0:
+                gapReward = gapReward + self.Gap_Dim_0(robot)
+            elif dim==1:
+                gapReward = gapReward + self.Gap_Dim_1(robot)
+            else:
+                gapReward = gapReward + self.Gap_Dim_2(robot)
+
+        return gapReward
+
     def Gaussian(self,x):
 
         return np.exp( -x**2 / 2.0 )
@@ -480,7 +556,6 @@ class CPPN:
         kernel = np.zeros([3,3,3],dtype='f')
 
         val = 1
-
         for i in range(3):
             for j in range(3):
                 for k in range(3):
@@ -489,13 +564,10 @@ class CPPN:
 
         ln,wd,dp = binarizedRobot.shape
 
-        out = signal.convolve(binarizedRobot[1:ln-1,1:wd-1,1:dp-1], kernel, mode='full', method='auto')
+        out = signal.convolve(binarizedRobot, kernel, mode='same', method='direct')
+
+        out = out[1:ln-1,1:wd-1,1:dp-1]
 
         rankedOut = rankdata(out)
 
-        print(binarizedRobot)
-        print(rankedOut)
-        exit()
-
-        return 1.0
-
+        return np.std(rankedOut)

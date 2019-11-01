@@ -3,30 +3,30 @@ import matplotlib.pyplot as plt
 import pickle
 import sys
 
-arguments = len(sys.argv) - 1
+def ShowRandomSeed(randomSeed):
 
-randomSeed = int(sys.argv[arguments])
+    cppn = pickle.load( open( "data/cppn"+str(randomSeed)+".p", "rb" ) )
 
-cppn = pickle.load( open( "data/cppn"+str(randomSeed)+".p", "rb" ) )
+    cppn.Add_W2V_Weights()
 
-cppn.Add_W2V_Weights()
+    fig = plt.figure(randomSeed)
 
-fig = plt.figure(1)
+    panelNum = 1
 
-panelNum = 1
+    for word1Index in range(0,c.numWords):
 
-for word1Index in range(0,c.numWords):
+        word1 = c.words[word1Index]
 
-    word1 = c.words[word1Index]
+        for word2Index in range(0,c.numWords):
 
-    for word2Index in range(0,c.numWords):
+            word2 = c.words[word2Index]
 
-        word2 = c.words[word2Index]
+            if word1Index <= word2Index:
 
-        if word1Index <= word2Index:
+                cppn.Show_At_Resolution_With_Words_In_Figure(c.robotResolution,word1,word2,fig,panelNum)
 
-            cppn.Show_At_Resolution_With_Words_In_Figure(c.robotResolution,word1,word2,fig,panelNum)
+            panelNum = panelNum + 1
 
-        panelNum = panelNum + 1
+    plt.show()
 
-plt.show()
+ShowRandomSeed( int(sys.argv[1]) ) 
