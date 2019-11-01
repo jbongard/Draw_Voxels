@@ -6,6 +6,8 @@ import math
 import numpy as np
 import pickle
 from   scipy.ndimage import label
+from   scipy import signal
+from   scipy.stats import rankdata
 
 import sys
 sys.path.insert(0, "/Users/jbongard/Dropbox/JoshBongard/0_Code/TPR_3")
@@ -75,15 +77,15 @@ class CPPN:
 
         symmetryScore = self.Compute_Symmetry(robot)
 
+        shapeComplexity = self.Shape_Complexity_Of(robot)
+
         numEdgePieces = self.Edge_Pieces_Of(robot)
 
         labelledRobot , numComponents = self.Extract_Largest_Component(robot)
 
-        if numComponents != 1:
+        onlyOneComponent = numComponents == 1
 
-            self.fitness = c.worstFitness 
-        else:
-            self.fitness = symmetryScore * surfaceArea * ( 1 / (1 + numEdgePieces) ) # penaltyForEdgePieces + surfaceArea
+        self.fitness = onlyOneComponent * symmetryScore * shapeComplexity # * surfaceArea * ( 1 / (1 + numEdgePieces) )
 
     def Dominates(self,other):
 
@@ -337,7 +339,13 @@ class CPPN:
 
         self.inputLayer[3] = math.sqrt( x**2 + y**2 + z**2 )
 
-        self.inputLayer[4] = 1 # Bias
+        self.inputLayer[4] = x - y
+
+        self.inputLayer[5] = x - z
+
+        self.inputLayer[6] = y - z
+
+        self.inputLayer[7] = 1 # Bias
 
         self.hiddenLayer1 = np.dot( self.inputLayer   , self.IHWeights )
 
@@ -455,3 +463,39 @@ class CPPN:
         NewValue = (((OldValue - OldMin) * NewRange) / OldRange) + NewMin
 
         return NewValue
+
+    def Shape_Complexity_Of(self,robot):
+
+        def Binarize(x):
+
+            if x>1:
+                return 1
+            else:
+                return x
+
+        vBinarize = np.vectorize(Binarize)
+
+        binarizedRobot = vBinarize(robot)
+
+        kernel = np.zeros([3,3,3],dtype='f')
+
+        val = 1
+
+        for i in range(3):
+            for j in range(3):
+                for k in range(3):
+                    kernel[i,j,k] = val
+                    val = val * 2
+
+        ln,wd,dp = binarizedRobot.shape
+
+        out = signal.convolve(binarizedRobot[1:ln-1,1:wd-1,1:dp-1], kernel, mode='full', method='auto')
+
+        rankedOut = rankdata(out)
+
+        print(binarizedRobot)
+        print(rankedOut)
+        exit()
+
+        return 1.0
+

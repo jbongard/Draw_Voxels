@@ -10,7 +10,6 @@ print(kernel)
 
 print(matrix)
 
-[ln,wd] = 
 out = signal.convolve(kernel, matrix, mode='same', boundary='fill', fillvalue=0)
 
 print(out)

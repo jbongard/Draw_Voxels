@@ -22,7 +22,7 @@ robotResolution = 2 * 2 # Must be even
 
 # ---------------- CPPN -----------------
 
-cppnInputs = 5 # x , y , z , d , bias
+cppnInputs = 8 # x , y , z , d , xy, yz, xz, bias
 
 cppnHiddens = 3
 
@@ -32,9 +32,9 @@ cppnInitialMinWeight = -10.0
 
 cppnInitialMaxWeight = +10.0
 
-cppnInitialMinW2VWeight = cppnInitialMinWeight / 100.0
+cppnInitialMinW2VWeight = 0.0 # cppnInitialMinWeight / 10.0
 
-cppnInitialMaxW2VWeight = cppnInitialMaxWeight / 100.0
+cppnInitialMaxW2VWeight = 0.0 # cppnInitialMaxWeight / 10.0
 
 cppnSinActFn = 0
 cppnAbsActFn = 1
