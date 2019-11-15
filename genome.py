@@ -20,7 +20,7 @@ class GENOME:
 
     def Dominates(self,other):
 
-        if self.Get_Fitness() >= other.Get_Fitness():
+        if self.Get_Fitness() <= other.Get_Fitness():
 
             if self.Get_Age() <= other.Get_Age():
 

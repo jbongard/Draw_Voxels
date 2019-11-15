@@ -101,9 +101,9 @@ class AFPO:
 
     def Find_Best_Genome(self):
 
-        GenomesSortedByFitness = sorted(self.genomes.values(), key=operator.attrgetter('fitness'),reverse=True)
+        genomesSortedByFitness = sorted(self.genomes.values(), key=operator.attrgetter('fitness'),reverse=False)
 
-        return GenomesSortedByFitness[0]
+        return genomesSortedByFitness[0]
 
     def Inject(self):
 
