@@ -2,12 +2,6 @@ import numpy as np
 
 import math
 
-# ------------- Words -------------------
-
-words = ["jump", "walk", "grab", "encompass"]
-
-numWords = len(words)
-
 # --------- Evolution -------------------
 
 popSize = 50
@@ -15,10 +9,6 @@ popSize = 50
 numGenerations = 1000
 
 worstFitness = -1000000
-
-# -------------- Robot ------------------
-
-robotResolution = 2 * 5 # Must be even
 
 # ---------------- CPPN -----------------
 

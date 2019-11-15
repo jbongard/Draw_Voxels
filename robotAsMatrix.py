@@ -1,3 +1,4 @@
+import constants         as     c
 import matplotlib.pyplot as     plt
 import numpy             as     np
 from   robot             import ROBOT
@@ -10,19 +11,25 @@ class ROBOT_AS_MATRIX(ROBOT):
 
     def Initialize(self):
 
-        self.X = np.linspace(-1.0,+1.0, num=2) 
+        self.resolution = 10
 
-        self.Y = np.linspace(-1.0,+1.0, num=2)     
+        self.axisMin = -1.0
 
-        self.matrix = np.zeros([2,2],dtype='f')
+        self.axisMax = +1.0
+
+        self.X = np.linspace(self.axisMin , self.axisMax , num=self.resolution) 
+
+        self.Y = np.linspace(self.axisMin , self.axisMax , num=self.resolution)     
+
+        self.matrix = np.zeros([self.resolution,self.resolution],dtype='f')
 
     def Paint_With(self,cppn):
 
-        for j in range(0,2):
+        for j in range(0,self.resolution): 
 
             y = self.Y[j]
 
-            for i in range(0,2):
+            for i in range(0,self.resolution):
 
                 x = self.X[i]
 
@@ -36,7 +43,11 @@ class ROBOT_AS_MATRIX(ROBOT):
 
     def Show(self):
 
-        fig = plt.figure(1)
+        plt.matshow( self.matrix , cmap='gray' )
+
+        plt.xticks( [ 0 , self.resolution-1 ] , labels = [ self.axisMin , self.axisMax ] )
+
+        plt.yticks( [ 0 , self.resolution-1 ] , labels = [ self.axisMin , self.axisMax ] )
 
         plt.show()
 

@@ -33,3 +33,11 @@ class GENOME:
     def Print(self):
 
         print(self.fitness , self.age)
+
+    def Show(self):
+
+        robot = ROBOT_AS_MATRIX()
+
+        robot.Paint_With(self.cppn)
+
+        robot.Show()

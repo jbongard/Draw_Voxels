@@ -29,6 +29,8 @@ class AFPO:
        
         #    self.Perform_One_Generation()
 
+        self.Show_Best_Genome()
+
 # -------------------------- Private methods ----------------------
 
     def Age(self):
@@ -155,3 +157,8 @@ class AFPO:
 
         bestGenome.Save(self.randomSeed)
 
+    def Show_Best_Genome(self):
+
+        bestGenome = self.Find_Best_Genome()
+
+        bestGenome.Show()
