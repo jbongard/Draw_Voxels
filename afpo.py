@@ -146,10 +146,8 @@ class AFPO:
         print(': ', end='')
 
         bestGenome = self.Find_Best_Genome()
-
-        print( str( round(bestGenome.Get_Fitness()) ) + ' \t' , end = '' )
-
-        print( str( round(bestGenome.Get_Age()) ) )
+ 
+        bestGenome.Print()
 
     def Save_Best(self):
 

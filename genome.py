@@ -10,8 +10,6 @@ class GENOME:
 
         self.cppn = CPPN(inputWidth=2,outputWidth=1)
 
-        self.cppn.Print()
-
         self.age     = 0
 
         self.fitness = c.worstFitness
@@ -20,9 +18,9 @@ class GENOME:
 
         robot = ROBOT_AS_MATRIX()
 
-        self.cppn.Paint(robot)
+        robot.Paint_With(self.cppn)
 
-        # self.Compute_Fitness(robot)
+        self.fitness = robot.Get_Fitness()
 
     def Get_Age(self):
 
@@ -34,11 +32,4 @@ class GENOME:
 
     def Print(self):
 
-        print(self.ID)
-
-# ---------------------------- Private methods ---------------------------
-
-    def Compute_Fitness(self,robot):
-
-        self.fitness = c.worstFitness
-    
+        print(self.fitness , self.age)

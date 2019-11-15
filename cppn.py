@@ -20,10 +20,53 @@ class CPPN:
         self.inputWidth   = inputWidth
 
         self.outputWidth  = outputWidth
- 
-        self.inputLayer   = np.zeros(self.inputWidth,dtype='f')
 
-        self.IHWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [c.cppnInputs,c.cppnHiddens] )
+        self.Create_Input_Layer()
+
+        self.Create_First_Hidden_Layer()
+
+        self.Create_Second_Hidden_Layer()
+
+        self.Create_Output_Layer()
+
+    def Evaluate_At(self,inputs):
+
+        self.inputLayer = inputs
+
+        self.hiddenLayer1 = np.dot( self.inputLayer   , self.IHWeights )
+
+        for h in range(c.cppnHiddens):
+
+            self.hiddenLayer1[h] = self.activeLayer1[h]( self.hiddenLayer1[h] )
+
+        self.hiddenLayer2 = np.dot( self.hiddenLayer1 , self.HHWeights )
+
+        for h in range(c.cppnHiddens):
+
+            self.hiddenLayer2[h] = self.activeLayer2[h]( self.hiddenLayer2[h] )
+
+        self.outputLayer  = np.tanh( np.dot( self.hiddenLayer2 , self.HOWeights ) )
+
+        return self.outputLayer
+
+    def Print(self):
+
+        print(self.inputLayer)
+
+        print(self.hiddenLayer1)
+
+        print(self.hiddenLayer2)
+
+        print(self.outputLayer)
+
+        print('')
+
+
+# -------------- Private methods --------------------
+
+    def Create_First_Hidden_Layer(self):
+
+        self.Create_IH_Weights()
 
         self.hiddenLayer1 = np.zeros(c.cppnHiddens,dtype='f')
 
@@ -33,9 +76,33 @@ class CPPN:
 
             activationFunctionType = np.random.randint(c.numCPPNActivationFunctions)
 
-            self.activeLayer1[h] = c.cppnActivationFunctions[activationFunctionType] 
+            self.activeLayer1[h] = c.cppnActivationFunctions[activationFunctionType]
+
+    def Create_HH_Weights(self):
 
         self.HHWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [c.cppnHiddens,c.cppnHiddens] )
+
+    def Create_HO_Weights(self):
+
+        self.HOWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [c.cppnHiddens,self.outputWidth] )
+
+    def Create_Input_Layer(self):
+
+        self.inputLayer   = np.zeros(self.inputWidth,dtype='f')
+
+    def Create_IH_Weights(self):
+
+        self.IHWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [self.inputWidth,c.cppnHiddens] )
+
+    def Create_Output_Layer(self):
+
+        self.Create_HO_Weights()
+
+        self.outputLayer  = np.zeros(self.outputWidth,dtype='f')
+
+    def Create_Second_Hidden_Layer(self):
+
+        self.Create_HH_Weights()
 
         self.hiddenLayer2 = np.zeros(c.cppnHiddens,dtype='f')
 
@@ -46,14 +113,6 @@ class CPPN:
             activationFunctionType = np.random.randint(c.numCPPNActivationFunctions)
 
             self.activeLayer2[h] = c.cppnActivationFunctions[activationFunctionType]
-
-        self.HOWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [c.cppnHiddens,c.cppnOutputs] )
-
-        self.outputLayer  = np.zeros(self.outputWidth,dtype='f')
-
-    def Print(self):
-
-        print('I am a CPPN.')
 
 # -------------- Old functions ----------------------
 
@@ -136,14 +195,6 @@ class CPPN:
             self.Mutate_A_Weight()
         else:
             self.Mutate_An_Activation_Function()
-
-    def Paint(self,robot):
-
-        dimensions = robot.shape
-
-        print(dimensions)
-
-        exit()
 
     def Paint_At_Resolution(self,robot,resolution):
 
@@ -333,42 +384,15 @@ class CPPN:
 
         self.Evaluate_At_With_Words(x,y,z,word,"")
 
-    def Evaluate_At_With_Words(self,x,y,z,word1,word2):
+    def Evaluate_At(self,inputs):
 
-        self.inputLayer[0] = x
-
-        self.inputLayer[1] = y
-
-        self.inputLayer[2] = z
-
-        self.inputLayer[3] = math.sqrt( x**2 + y**2 + z**2 )
-
-        self.inputLayer[4] = x - y
-
-        self.inputLayer[5] = x - z
-
-        self.inputLayer[6] = y - z
-
-        self.inputLayer[7] = 1 # Bias
+        self.inputLayer = inputs
 
         self.hiddenLayer1 = np.dot( self.inputLayer   , self.IHWeights )
-
-        if word1 != "":
-
-            vec = self.word2vecVectorSpace.get_vector( word1 )
-
-            self.hiddenLayer1 = self.hiddenLayer1 + np.dot( vec   , self.v1HWeights )
-
-        if word2 != "":
-
-            vec = self.word2vecVectorSpace.get_vector( word2 )
-
-            self.hiddenLayer1 = self.hiddenLayer1 + np.dot( vec   , self.v2HWeights )
 
         for h in range(c.cppnHiddens):
 
             self.hiddenLayer1[h] = self.activeLayer1[h]( self.hiddenLayer1[h] )
-
 
         self.hiddenLayer2 = np.dot( self.hiddenLayer1 , self.HHWeights )
 
@@ -376,9 +400,7 @@ class CPPN:
 
             self.hiddenLayer2[h] = self.activeLayer2[h]( self.hiddenLayer2[h] )
 
-
         self.outputLayer  = np.tanh( np.dot( self.hiddenLayer2 , self.HOWeights ) )
-
 
         return self.outputLayer 
 
