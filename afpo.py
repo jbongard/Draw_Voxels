@@ -1,4 +1,5 @@
 import constants as c
+import operator
 
 from genome import GENOME 
 
@@ -96,11 +97,11 @@ class AFPO:
 
             self.cppns[newCPPN].Mutate()
 
-    def Find_Best_CPPN(self):
+    def Find_Best_Genome(self):
 
-        CPPNsSortedByFitness = sorted(self.cppns.values(), key=operator.attrgetter('fitness'),reverse=True)
+        GenomesSortedByFitness = sorted(self.genomes.values(), key=operator.attrgetter('fitness'),reverse=True)
 
-        return CPPNsSortedByFitness[0]
+        return GenomesSortedByFitness[0]
 
     def Inject(self):
 
@@ -116,7 +117,7 @@ class AFPO:
 
         self.Print()
 
-        self.Save_Best()
+        #self.Save_Best()
 
     def Perform_One_Generation(self,resolution):
 
@@ -146,15 +147,15 @@ class AFPO:
 
         print(': ', end='')
 
-        bestCPPN = self.Find_Best_CPPN()
+        bestGenome = self.Find_Best_Genome()
 
-        print( str( round(bestCPPN.Get_Fitness()) ) + ' \t' , end = '' )
+        print( str( round(bestGenome.Get_Fitness()) ) + ' \t' , end = '' )
 
-        print( str( round(bestCPPN.Get_Age()) ) )
+        print( str( round(bestGenome.Get_Age()) ) )
 
     def Save_Best(self):
 
-        bestCPPN = self.Find_Best_CPPN()
+        bestGenome = self.Find_Best_Genome()
 
-        bestCPPN.Save(self.randomSeed)
+        bestGenome.Save(self.randomSeed)
 

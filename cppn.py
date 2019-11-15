@@ -19,8 +19,6 @@ class CPPN:
 
         self.Set_ID(ID)
 
-        self.fitness      = c.worstFitness
-
         self.age          = 0
 
         self.inputLayer   = np.zeros(c.cppnInputs,dtype='f')
@@ -149,10 +147,6 @@ class CPPN:
                     if vals[1] > 0 and robot[x,y,z]==1:
 
                         robot[x,y,z] = 2
-
-    def Print(self):
-
-        print(self.fitness,self.age)
 
     def Set_ID(self,ID):
 
@@ -293,10 +287,6 @@ class CPPN:
 
         return action 
 
-    def Get_Age(self):
-
-        return self.age
-
     def Get_DeltaX_From_Outputs(self,outputs):
 
         # return outputs[c.numEdgeChangeActions]
@@ -316,10 +306,6 @@ class CPPN:
         minusDeltaYToDeltaY = minusOneToOne * c.vectorFieldYDeltaMax
 
         return minusDeltaYToDeltaY
-
-    def Get_Fitness(self):
-
-        return self.fitness
 
     def Evaluate_At_With_Word(self,x,y,z,word):
 
