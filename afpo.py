@@ -12,39 +12,29 @@ class AFPO:
 
         self.randomSeed = randomSeed
 
-        self.nextAvailableID = 0
-
-        self.cppns = {}
-
-        for cppn in range(c.popSize):
-
-            self.cppns[cppn] = CPPN(self.nextAvailableID)
-
-            self.nextAvailableID = self.nextAvailableID + 1
-
-    def Evolve_At_Resolution(self,resolution):
+        self.resolution = c.robotResolution
 
         self.currentGeneration = 0
 
-        self.Perform_First_Generation(resolution)
+        self.nextAvailableID = 0
 
-        for self.currentGeneration in range(1,c.numGenerations):
+        self.genomes = {}
+
+        for populationPosition in range(c.popSize):
+
+            self.genomes[populationPosition] = CPPN(self.nextAvailableID)
+
+            self.nextAvailableID = self.nextAvailableID + 1
+
+    def Evolve(self):
+
+        pass
+
+        # self.Perform_First_Generation(resolution)
+
+        #for self.currentGeneration in range(1,c.numGenerations):
        
-            self.Perform_One_Generation(resolution)
-
-    def Save_Best(self):
-
-        bestCPPN = self.Find_Best_CPPN()
-
-        bestCPPN.Save(self.randomSeed)
-
-    def Show_Best_At_Resolution(self,resolution):
-
-        bestCPPN = self.Find_Best_CPPN()
-
-        fig = plt.figure(1)
-
-        bestCPPN.Show_At_Resolution(resolution,fig)
+        #    self.Perform_One_Generation(resolution)
 
 # -------------------------- Private methods ----------------------
 
@@ -172,8 +162,9 @@ class AFPO:
 
         print( str( round(bestCPPN.Get_Age()) ) )
 
-        #k = 0
-        #for cppn in sorted(self.cppns.values(), key=operator.attrgetter('fitness'),reverse=True):
-        #    print(k, cppn.Get_Fitness() , cppn.Get_Age())
-        #    k = k + 1
-        #print()
+    def Save_Best(self):
+
+        bestCPPN = self.Find_Best_CPPN()
+
+        bestCPPN.Save(self.randomSeed)
+
