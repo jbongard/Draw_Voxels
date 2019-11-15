@@ -9,8 +9,6 @@ class AFPO:
 
         self.randomSeed = randomSeed
 
-        self.resolution = c.robotResolution
-
         self.currentGeneration = 0
 
         self.nextAvailableID = 0
@@ -29,7 +27,7 @@ class AFPO:
 
         #for self.currentGeneration in range(1,c.numGenerations):
        
-        #    self.Perform_One_Generation(resolution)
+        #    self.Perform_One_Generation()
 
 # -------------------------- Private methods ----------------------
 
@@ -119,7 +117,7 @@ class AFPO:
 
         #self.Save_Best()
 
-    def Perform_One_Generation(self,resolution):
+    def Perform_One_Generation(self):
 
         self.Expand()
 

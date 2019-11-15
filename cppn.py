@@ -15,13 +15,13 @@ from database.word2vecDatabase import Word2VecVectorSpace
 
 class CPPN: 
 
-    def __init__(self,ID):
+    def __init__(self,inputWidth,outputWidth):
 
-        self.Set_ID(ID)
+        self.inputWidth   = inputWidth
 
-        self.age          = 0
-
-        self.inputLayer   = np.zeros(c.cppnInputs,dtype='f')
+        self.outputWidth  = outputWidth
+ 
+        self.inputLayer   = np.zeros(self.inputWidth,dtype='f')
 
         self.IHWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [c.cppnInputs,c.cppnHiddens] )
 
@@ -49,7 +49,25 @@ class CPPN:
 
         self.HOWeights    = np.random.uniform( c.cppnInitialMinWeight , c.cppnInitialMaxWeight , [c.cppnHiddens,c.cppnOutputs] )
 
-        self.outputLayer  = np.zeros(c.cppnOutputs,dtype='f')
+        self.outputLayer  = np.zeros(self.outputWidth,dtype='f')
+
+    def Print(self):
+
+        print('I am a CPPN.')
+
+# -------------- Old functions ----------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
     def Add_W2V_Weights(self):
 
@@ -119,6 +137,14 @@ class CPPN:
         else:
             self.Mutate_An_Activation_Function()
 
+    def Paint(self,robot):
+
+        dimensions = robot.shape
+
+        print(dimensions)
+
+        exit()
+
     def Paint_At_Resolution(self,robot,resolution):
 
         self.Paint_At_Resolution_With_Words(robot,resolution,"","")
@@ -147,10 +173,6 @@ class CPPN:
                     if vals[1] > 0 and robot[x,y,z]==1:
 
                         robot[x,y,z] = 2
-
-    def Set_ID(self,ID):
-
-        self.ID = ID
 
     def Save(self,randomSeed):
 

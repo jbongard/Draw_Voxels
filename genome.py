@@ -1,4 +1,6 @@
-import constants as c
+import constants     as     c
+from   cppn          import CPPN
+from   robotAsMatrix import ROBOT_AS_MATRIX
 
 class GENOME:
 
@@ -6,7 +8,9 @@ class GENOME:
 
         self.ID = ID
 
-        # self.cppn = CPPN(ID)
+        self.cppn = CPPN(inputWidth=2,outputWidth=1)
+
+        self.cppn.Print()
 
         self.age     = 0
 
@@ -14,13 +18,11 @@ class GENOME:
 
     def Evaluate(self):
 
-        pass
+        robot = ROBOT_AS_MATRIX()
 
-        #robot = np.zeros([resolution,resolution,resolution],dtype='f')
+        self.cppn.Paint(robot)
 
-        #self.cppns[cppn].Paint_At_Resolution(robot,resolution)
-
-        #self.cppns[cppn].Compute_Fitness(robot)
+        # self.Compute_Fitness(robot)
 
     def Get_Age(self):
 
@@ -33,3 +35,10 @@ class GENOME:
     def Print(self):
 
         print(self.ID)
+
+# ---------------------------- Private methods ---------------------------
+
+    def Compute_Fitness(self,robot):
+
+        self.fitness = c.worstFitness
+    
