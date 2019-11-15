@@ -1,10 +1,6 @@
-import copy
 import constants as c
-import matplotlib.pyplot as plt
-import numpy as np
-import operator
 
-from cppn import CPPN
+from genome import GENOME 
 
 class AFPO:
 
@@ -22,15 +18,13 @@ class AFPO:
 
         for populationPosition in range(c.popSize):
 
-            self.genomes[populationPosition] = CPPN(self.nextAvailableID)
+            self.genomes[populationPosition] = GENOME(self.nextAvailableID)
 
             self.nextAvailableID = self.nextAvailableID + 1
 
     def Evolve(self):
 
-        pass
-
-        # self.Perform_First_Generation(resolution)
+        self.Perform_First_Generation()
 
         #for self.currentGeneration in range(1,c.numGenerations):
        
@@ -80,15 +74,11 @@ class AFPO:
 
                 self.cppns[cppnToMove] = self.cppns.pop(cppnToMove+1)
 
-    def Evaluate_CPPNs(self,resolution):
+    def Evaluate_Genomes(self):
 
-        for cppn in self.cppns:
+        for genome in self.genomes:
 
-            robot = np.zeros([resolution,resolution,resolution],dtype='f')
-
-            self.cppns[cppn].Paint_At_Resolution(robot,resolution)
-
-            self.cppns[cppn].Compute_Fitness(robot)
+            self.genomes[genome].Evaluate()
 
     def Expand(self):
 
@@ -120,9 +110,9 @@ class AFPO:
 
         self.nextAvailableID = self.nextAvailableID + 1
 
-    def Perform_First_Generation(self,resolution):
+    def Perform_First_Generation(self):
 
-        self.Evaluate_CPPNs(resolution)
+        self.Evaluate_Genomes()
 
         self.Print()
 
