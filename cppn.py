@@ -164,30 +164,6 @@ class CPPN:
 
         self.fitness = onlyOneComponent * gapReward # * symmetryScore * ( 1 / (1 + numEdgePieces) )
 
-    def Dominates(self,other):
-
-        if self.Get_Fitness() >= other.Get_Fitness():
-
-            if self.Get_Age() <= other.Get_Age():
-
-                equalFitnesses = self.Get_Fitness() == other.Get_Fitness()
-
-                equalAges      = self.Get_Age()     == other.Get_Age()
-
-                if not equalFitnesses and equalAges:
-
-                    return True
-                else:
-                    return self.Is_Newer_Than(other) 
-            else:
-                return False
-        else:
-            return False
-
-    def Get_ID(self):
-
-        return self.ID
-
     def Mutate(self):
 
         if np.random.randint(2) == 0:
@@ -487,10 +463,6 @@ class CPPN:
     def Gaussian(self,x):
 
         return np.exp( -x**2 / 2.0 )
-
-    def Is_Newer_Than(self,other):
-
-        return self.Get_ID() > other.Get_ID()
 
     def Mutate_A_Weight(self):
 

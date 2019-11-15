@@ -1,4 +1,6 @@
 import constants as c
+import copy
+import numpy     as np
 import operator
 
 from genome import GENOME 
@@ -25,9 +27,9 @@ class AFPO:
 
         self.Perform_First_Generation()
 
-        #for self.currentGeneration in range(1,c.numGenerations):
+        for self.currentGeneration in range(1,c.numGenerations):
        
-        #    self.Perform_One_Generation()
+             self.Perform_One_Generation()
 
         self.Show_Best_Genome()
 
@@ -35,13 +37,13 @@ class AFPO:
 
     def Age(self):
 
-        for cppn in self.cppns:
+        for genome in self.genomes:
 
-            self.cppns[cppn].Age()
+            self.genomes[genome].Age()
 
     def Aggressor_Dominates_Defender(self,aggressor,defender):
 
-        return self.cppns[aggressor].Dominates(self.cppns[defender])
+        return self.genomes[aggressor].Dominates(self.genomes[defender])
 
     def Choose_Aggressor(self):
 
@@ -59,7 +61,7 @@ class AFPO:
 
     def Contract(self):
 
-        while len(self.cppns) > c.popSize:
+        while len(self.genomes) > c.popSize:
 
             aggressorDominatesDefender = False
 
@@ -71,9 +73,9 @@ class AFPO:
 
                 aggressorDominatesDefender = self.Aggressor_Dominates_Defender(aggressor,defender)
 
-            for cppnToMove in range(defender,len(self.cppns)-1):
+            for genomeToMove in range(defender,len(self.genomes)-1):
 
-                self.cppns[cppnToMove] = self.cppns.pop(cppnToMove+1)
+                self.genomes[genomeToMove] = self.genomes.pop(genomeToMove+1)
 
     def Evaluate_Genomes(self):
 
@@ -83,19 +85,19 @@ class AFPO:
 
     def Expand(self):
 
-        popSize = len(self.cppns)
+        popSize = len(self.genomes)
 
-        for newCPPN in range( popSize , 2 * popSize - 1 ):
+        for newGenome in range( popSize , 2 * popSize - 1 ):
 
             spawner = self.Choose_Aggressor()
 
-            self.cppns[newCPPN] = copy.deepcopy( self.cppns[spawner] )
+            self.genomes[newGenome] = copy.deepcopy( self.genomes[spawner] )
 
-            self.cppns[newCPPN].Set_ID(self.nextAvailableID)
+            self.genomes[newGenome].Set_ID(self.nextAvailableID)
 
             self.nextAvailableID = self.nextAvailableID + 1
 
-            self.cppns[newCPPN].Mutate()
+            self.genomes[newGenome].Mutate()
 
     def Find_Best_Genome(self):
 
@@ -105,9 +107,9 @@ class AFPO:
 
     def Inject(self):
 
-        popSize = len(self.cppns)
+        popSize = len(self.genomes)
 
-        self.cppns[popSize-1] = CPPN(self.nextAvailableID)
+        self.genomes[popSize-1] = GENOME(self.nextAvailableID)
 
         self.nextAvailableID = self.nextAvailableID + 1
 
@@ -117,7 +119,7 @@ class AFPO:
 
         self.Print()
 
-        #self.Save_Best()
+        self.Save_Best()
 
     def Perform_One_Generation(self):
 
@@ -127,7 +129,7 @@ class AFPO:
 
         self.Inject()
 
-        self.Evaluate_CPPNs(resolution)
+        self.Evaluate_Genomes()
 
         self.Contract()
 

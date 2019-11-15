@@ -6,13 +6,37 @@ class GENOME:
 
     def __init__(self,ID):
 
-        self.ID = ID
+        self.Set_ID(ID)
 
         self.cppn = CPPN(inputWidth=2,outputWidth=1)
 
         self.age     = 0
 
         self.fitness = c.worstFitness
+
+    def Age(self):
+
+        self.age = self.age + 1
+
+    def Dominates(self,other):
+
+        if self.Get_Fitness() >= other.Get_Fitness():
+
+            if self.Get_Age() <= other.Get_Age():
+
+                equalFitnesses = self.Get_Fitness() == other.Get_Fitness()
+
+                equalAges      = self.Get_Age()     == other.Get_Age()
+
+                if not equalFitnesses and equalAges:
+
+                    return True
+                else:
+                    return self.Is_Newer_Than(other)
+            else:
+                return False
+        else:
+            return False
 
     def Evaluate(self):
 
@@ -30,9 +54,21 @@ class GENOME:
 
         return self.fitness
 
+    def Mutate(self):
+
+        self.cppn.Mutate()
+
     def Print(self):
 
         print(self.fitness , self.age)
+
+    def Save(self,randomSeed):
+
+        self.cppn.Save(randomSeed)
+
+    def Set_ID(self,ID):
+
+        self.ID = ID
 
     def Show(self):
 
@@ -41,3 +77,13 @@ class GENOME:
         robot.Paint_With(self.cppn)
 
         robot.Show()
+
+# -------------------- Private methods ----------------------
+
+    def Get_ID(self):
+
+        return self.ID
+
+    def Is_Newer_Than(self,other):
+
+        return self.Get_ID() > other.Get_ID()

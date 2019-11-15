@@ -6,7 +6,7 @@ import math
 
 popSize = 50
 
-numGenerations = 1000
+numGenerations = 2
 
 worstFitness = -1000000
 
