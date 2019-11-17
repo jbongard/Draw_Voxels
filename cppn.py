@@ -17,7 +17,7 @@ class CPPN:
 
     def __init__(self,inputWidth,outputWidth):
 
-        self.inputWidth   = inputWidth
+        self.inputWidth   = inputWidth + 1 # Add a bias neuron
 
         self.outputWidth  = outputWidth
 
@@ -31,7 +31,7 @@ class CPPN:
 
     def Evaluate_At(self,inputs):
 
-        self.inputLayer = inputs
+        self.inputLayer[0:len(inputs)] = inputs
 
         self.hiddenLayer1 = np.dot( self.inputLayer   , self.IHWeights )
 
@@ -89,6 +89,8 @@ class CPPN:
     def Create_Input_Layer(self):
 
         self.inputLayer   = np.zeros(self.inputWidth,dtype='f')
+
+        self.inputLayer[self.inputWidth-1] = 1 # The bias neuron.
 
     def Create_IH_Weights(self):
 
@@ -359,26 +361,6 @@ class CPPN:
     def Evaluate_At_With_Word(self,x,y,z,word):
 
         self.Evaluate_At_With_Words(x,y,z,word,"")
-
-    def Evaluate_At(self,inputs):
-
-        self.inputLayer = inputs
-
-        self.hiddenLayer1 = np.dot( self.inputLayer   , self.IHWeights )
-
-        for h in range(c.cppnHiddens):
-
-            self.hiddenLayer1[h] = self.activeLayer1[h]( self.hiddenLayer1[h] )
-
-        self.hiddenLayer2 = np.dot( self.hiddenLayer1 , self.HHWeights )
-
-        for h in range(c.cppnHiddens):
-
-            self.hiddenLayer2[h] = self.activeLayer2[h]( self.hiddenLayer2[h] )
-
-        self.outputLayer  = np.tanh( np.dot( self.hiddenLayer2 , self.HOWeights ) )
-
-        return self.outputLayer 
 
     def Gap_Dim_0(self,robot):
 

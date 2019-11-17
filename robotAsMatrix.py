@@ -72,19 +72,19 @@ class ROBOT_AS_MATRIX(ROBOT):
 
         rightPart = self.matrix[ : , 1:self.resolution]
 
-        differences = np.fabs( leftPart - rightPart )
+        equalities = leftPart == rightPart
 
-        sumOfDifferences = np.sum( differences )
+        sumOfEqualities = np.sum( equalities )
 
         topPart = self.matrix[0:self.resolution-1 , :]
 
         bottomPart = self.matrix[ 1:self.resolution , :]
 
-        differences = np.fabs( topPart - bottomPart )
+        equalities = topPart == bottomPart
 
-        sumOfDifferences = sumOfDifferences + np.sum( differences )
+        sumOfEqualities = sumOfEqualities + np.sum( equalities )
 
-        return -sumOfDifferences # As many differences as possible
+        return sumOfEqualities
 
     def Half_Ones(self):
 
