@@ -58,9 +58,9 @@ class ROBOT_AS_MATRIX(ROBOT):
 
         plt.matshow( self.matrix , cmap='gray' , vmin = 0 , vmax = 1 )
 
-        plt.xticks( [ 0 , self.resolution-1 ] , labels = [ self.axisMin , self.axisMax ] )
+        plt.xticks( [ 0 , self.resolution-1 ] , [ self.axisMin , self.axisMax ] )
 
-        plt.yticks( [ 0 , self.resolution-1 ] , labels = [ self.axisMin , self.axisMax ] )
+        plt.yticks( [ 0 , self.resolution-1 ] , [ self.axisMin , self.axisMax ] )
 
         plt.show()
 

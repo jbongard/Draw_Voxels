@@ -6,7 +6,7 @@ import math
 
 popSize = 50
 
-numGenerations = 400 
+numGenerations = 10 # 0
 
 worstFitness = +1000000 # Fitness should always be minimized. 
 

@@ -33,19 +33,11 @@ class CPPN:
 
         self.inputLayer[0:len(inputs)] = inputs
 
-        self.hiddenLayer1 = np.dot( self.inputLayer   , self.IHWeights )
+        self.Evaluate_Hidden_Layer_One()
 
-        for h in range(c.cppnHiddens):
+        self.Evaluate_Hidden_Layer_Two()
 
-            self.hiddenLayer1[h] = self.activeLayer1[h]( self.hiddenLayer1[h] )
-
-        self.hiddenLayer2 = np.dot( self.hiddenLayer1 , self.HHWeights )
-
-        for h in range(c.cppnHiddens):
-
-            self.hiddenLayer2[h] = self.activeLayer2[h]( self.hiddenLayer2[h] )
-
-        self.outputLayer  = np.tanh( np.dot( self.hiddenLayer2 , self.HOWeights ) )
+        self.Evaluate_Output_Layer()
 
         return self.outputLayer
 
@@ -63,6 +55,18 @@ class CPPN:
 
 
 # -------------- Private methods --------------------
+
+    def Apply_Activation_Functions_To_Hidden_Layer_One(self):
+
+        for h in range(c.cppnHiddens):
+
+            self.hiddenLayer1[h] = self.activeLayer1[h]( self.hiddenLayer1[h] )
+
+    def Apply_Activation_Functions_To_Hidden_Layer_Two(self):
+
+        for h in range(c.cppnHiddens):
+
+            self.hiddenLayer2[h] = self.activeLayer2[h]( self.hiddenLayer2[h] )
 
     def Create_First_Hidden_Layer(self):
 
@@ -115,6 +119,22 @@ class CPPN:
             activationFunctionType = np.random.randint(c.numCPPNActivationFunctions)
 
             self.activeLayer2[h] = c.cppnActivationFunctions[activationFunctionType]
+
+    def Evaluate_Hidden_Layer_One(self):
+
+        self.hiddenLayer1 = np.dot( self.inputLayer   , self.IHWeights )
+
+        self.Apply_Activation_Functions_To_Hidden_Layer_One()
+
+    def Evaluate_Hidden_Layer_Two(self):
+
+        self.hiddenLayer2 = np.dot( self.hiddenLayer1 , self.HHWeights )
+
+        self.Apply_Activation_Functions_To_Hidden_Layer_Two()
+
+    def Evaluate_Output_Layer(self):
+
+        self.outputLayer  = np.tanh( np.dot( self.hiddenLayer2 , self.HOWeights ) )
 
     def Mutate(self):
 

@@ -31,8 +31,6 @@ class AFPO:
        
              self.Perform_One_Generation()
 
-        self.Show_Best_Genome()
-
 # -------------------------- Private methods ----------------------
 
     def Age(self):

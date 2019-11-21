@@ -9,3 +9,5 @@ randomSeed = int(sys.argv[arguments])
 afpo = AFPO(randomSeed)
 
 afpo.Evolve()
+
+# afpo.Show_Best_Genome()
