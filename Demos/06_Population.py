@@ -6,7 +6,7 @@ import numpy             as     np
 import matplotlib.pyplot as     plt
 
 resolution     = 10
-populationSize = 2
+populationSize = 2 
 
 x = np.linspace(-1.0 , +1.0 , num = resolution )
 y = np.linspace(-1.0 , +1.0 , num = resolution )
