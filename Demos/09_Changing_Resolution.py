@@ -3,16 +3,13 @@ sys.path.insert(0, '..')
 
 from   cppn              import CPPN
 import numpy             as     np
+import math
 import matplotlib.pyplot as     plt
 import copy
 
-resolution          = 3
-populationSize      = 2 
-numberOfGenerations = 1000
+resolutionIncreases = 4 * 4 
 
-x = np.linspace(-1.0 , +1.0 , num = resolution )
-y = np.linspace(-1.0 , +1.0 , num = resolution )
-z = np.linspace(-1.0 , +1.0 , num = resolution )
+panelWidth = math.sqrt(resolutionIncreases)
 
 # ------------------ Functions --------------------
 
@@ -44,26 +41,23 @@ def Draw_Tensor(panelIndex,tensor):
 
     fig = plt.figure( 1 )
 
-    ax = fig.add_subplot(1, 2, panelIndex, projection='3d')
+    ax = fig.add_subplot( panelWidth , panelWidth , panelIndex, projection='3d')
     ax.set_aspect('equal')
     ax.voxels( tensor , edgecolor="k")
 
 # ---------------- Main function ------------------
 
+
 parent = Create_Random_CPPN()
 
-parentTensor = Create_Tensor(parent)
+for resolution in range(1,resolutionIncreases+1):
 
-Draw_Tensor(1,parentTensor)
+    x = np.linspace(-1.0 , +1.0 , num = resolution )
+    y = np.linspace(-1.0 , +1.0 , num = resolution )
+    z = np.linspace(-1.0 , +1.0 , num = resolution )
 
-resolution = resolution + 1
+    parentTensor = Create_Tensor(parent)
 
-x = np.linspace(-1.0 , +1.0 , num = resolution )
-y = np.linspace(-1.0 , +1.0 , num = resolution )
-z = np.linspace(-1.0 , +1.0 , num = resolution )
-
-parentTensor = Create_Tensor(parent)
-
-Draw_Tensor(2,parentTensor)
+    Draw_Tensor(resolution,parentTensor)
 
 plt.show()
