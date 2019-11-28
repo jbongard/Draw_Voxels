@@ -1,5 +1,10 @@
 import constants     as     c
-from   cppn          import CPPN
+
+import sys
+sys.path.insert(0, "..")
+
+from   CPPNs.cppn    import CPPN
+
 from   robotAsMatrix import ROBOT_AS_MATRIX
 
 class GENOME:
