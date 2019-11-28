@@ -2,6 +2,8 @@ import constants as c
 import matplotlib.pyplot as plt
 import pickle
 import sys
+sys.path.insert(0, "..")
+from CPPNs.cppn import CPPN
 
 def ShowRandomSeed(randomSeed):
 
