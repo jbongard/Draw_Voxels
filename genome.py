@@ -6,12 +6,15 @@ sys.path.insert(0, "..")
 from   CPPNs.cppn    import CPPN
 
 from   robotAsMatrix import ROBOT_AS_MATRIX
+from   robotAsTensor import ROBOT_AS_TENSOR
 
 class GENOME:
 
-    def __init__(self,ID):
+    def __init__(self,ID,dimensionality):
 
         self.Set_ID(ID)
+
+        self.dimensionality = dimensionality
 
         self.cppn = CPPN(inputWidth=2,outputWidth=1)
 
@@ -45,7 +48,11 @@ class GENOME:
 
     def Evaluate(self):
 
-        robot = ROBOT_AS_MATRIX()
+        if self.dimensionality == 2:
+
+            robot = ROBOT_AS_MATRIX()
+        else:
+            robot = ROBOT_AS_TENSOR()
 
         robot.Paint_With(self.cppn)
 
@@ -65,7 +72,13 @@ class GENOME:
 
     def Print(self):
 
-        print(self.fitness , self.age)
+        print(' fitness: ' , end = '' )
+        print(self.fitness , end = '' )
+
+        print(' age: '     , end = '' )
+        print(self.age     , end = '' )
+
+        print()
 
     def Save(self,randomSeed):
 
@@ -77,7 +90,11 @@ class GENOME:
 
     def Show(self):
 
-        robot = ROBOT_AS_MATRIX()
+        if self.dimensionality == 2:
+
+            robot = ROBOT_AS_MATRIX()
+        else:
+            robot = ROBOT_AS_TENSOR()
 
         robot.Paint_With(self.cppn)
 

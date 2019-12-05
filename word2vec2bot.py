@@ -2,12 +2,12 @@ from afpo import AFPO
 
 import sys
 
-arguments = len(sys.argv) - 1
+randomSeed = int(sys.argv[1])
 
-randomSeed = int(sys.argv[arguments])
+dimensionality = int(sys.argv[2])
 
-afpo = AFPO(randomSeed)
+afpo = AFPO(randomSeed,dimensionality)
 
 afpo.Evolve()
 
-# afpo.Show_Best_Genome()
+afpo.Show_Best_Genome()

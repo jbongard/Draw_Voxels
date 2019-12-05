@@ -6,6 +6,10 @@ import math
 
 popSize = 50
 
-numGenerations = 10 # 0
+numGenerations = 20
 
 worstFitness = +1000000 # Fitness should always be minimized. 
+
+# ---------- Robots ---------------------
+
+robotResolution = 4

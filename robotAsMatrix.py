@@ -18,7 +18,7 @@ class ROBOT_AS_MATRIX(ROBOT):
 
     def Initialize(self):
 
-        self.resolution = 15 
+        self.resolution = c.robotResolution 
 
         self.axisMin = -1.0
 
