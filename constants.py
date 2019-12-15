@@ -4,7 +4,7 @@ import math
 
 # --------- Evolution -------------------
 
-popSize = 50
+popSize = 10
 
 numGenerations = 20
 
@@ -12,4 +12,4 @@ worstFitness = +1000000 # Fitness should always be minimized.
 
 # ---------- Robots ---------------------
 
-robotResolution = 4
+robotResolution = 3

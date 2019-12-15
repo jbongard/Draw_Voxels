@@ -8,5 +8,5 @@
 
 ## Running instructions
 
-python3 evolveInPyrosim.py 0
+python3 evolvingCPPNs.py 0 2
 

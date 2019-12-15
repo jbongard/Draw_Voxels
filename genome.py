@@ -5,8 +5,7 @@ sys.path.insert(0, "..")
 
 from   CPPNs.cppn    import CPPN
 
-from   robotAsMatrix import ROBOT_AS_MATRIX
-from   robotAsTensor import ROBOT_AS_TENSOR
+from   robotAsRobot import ROBOT_AS_ROBOT
 
 class GENOME:
 
@@ -48,11 +47,7 @@ class GENOME:
 
     def Evaluate(self):
 
-        if self.dimensionality == 2:
-
-            robot = ROBOT_AS_MATRIX()
-        else:
-            robot = ROBOT_AS_TENSOR()
+        robot = ROBOT_AS_ROBOT()
 
         robot.Paint_With(self.cppn)
 
