@@ -4,7 +4,12 @@
 
 1. Install https://github.com/jbongard/CPPNs in the parent directory.
 
-## Running instructions
+## Running instructions: evolve CPPNs with random seed 0 and dimensionality 2
 
-python3 evolvingCPPNs.py 0
+python3 evolvingCPPNs.py 0 2
+
+## Evolve CPPNs with random seed 0 and dimensionality 3
+
+python3 evolvingCPPNs.py 0 3
+
 
