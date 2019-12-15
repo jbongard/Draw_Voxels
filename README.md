@@ -6,5 +6,5 @@
 
 ## Running instructions
 
-python3 word2vec2bot.py 0
+python3 evolvingCPPNs.py 0
 
