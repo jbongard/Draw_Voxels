@@ -7,11 +7,9 @@ from genome import GENOME
 
 class AFPO:
 
-    def __init__(self,randomSeed,dimensionality):
+    def __init__(self,randomSeed):
 
         self.randomSeed = randomSeed
-
-        self.dimensionality = dimensionality
 
         self.currentGeneration = 0
 
@@ -21,7 +19,7 @@ class AFPO:
 
         for populationPosition in range(c.popSize):
 
-            self.genomes[populationPosition] = GENOME(self.nextAvailableID,self.dimensionality)
+            self.genomes[populationPosition] = GENOME(self.nextAvailableID)
 
             self.nextAvailableID = self.nextAvailableID + 1
 
@@ -109,7 +107,7 @@ class AFPO:
 
         popSize = len(self.genomes)
 
-        self.genomes[popSize-1] = GENOME(self.nextAvailableID,self.dimensionality)
+        self.genomes[popSize-1] = GENOME(self.nextAvailableID)
 
         self.nextAvailableID = self.nextAvailableID + 1
 

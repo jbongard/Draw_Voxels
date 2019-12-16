@@ -9,11 +9,9 @@ from   robotAsRobot import ROBOT_AS_ROBOT
 
 class GENOME:
 
-    def __init__(self,ID,dimensionality):
+    def __init__(self,ID):
 
         self.Set_ID(ID)
-
-        self.dimensionality = dimensionality
 
         self.cppn = CPPN(inputWidth=2,outputWidth=1)
 
@@ -51,6 +49,8 @@ class GENOME:
 
         robot.Paint_With(self.cppn)
 
+        # robot.Evaluate_In_Pyrosim( playPaused = False , playBlind = True , waitToFinish = True)
+
         self.fitness = robot.Get_Fitness()
 
     def Get_Age(self):
@@ -85,11 +85,7 @@ class GENOME:
 
     def Show(self):
 
-        if self.dimensionality == 2:
-
-            robot = ROBOT_AS_MATRIX()
-        else:
-            robot = ROBOT_AS_TENSOR()
+        robot = ROBOT_AS_ROBOT()
 
         robot.Paint_With(self.cppn)
 
