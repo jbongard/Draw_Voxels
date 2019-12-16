@@ -13,7 +13,7 @@ class GENOME:
 
         self.Set_ID(ID)
 
-        self.cppn = CPPN(inputWidth=2,outputWidth=1)
+        self.cppn = CPPN(inputWidth=2,outputWidth=4)
 
         self.age     = 0
 

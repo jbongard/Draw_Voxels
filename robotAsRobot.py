@@ -32,7 +32,7 @@ class ROBOT_AS_ROBOT(ROBOT):
 
                     if self.tensor[k,j,i]:
 
-                        sim.send_box(position=(x,y,z+1.0+c.voxelLength/2.0),sides=(c.voxelLength,c.voxelLength,c.voxelLength))
+                        sim.send_box(position=(x,y,z+1.0+c.voxelLength/2.0),sides=(c.voxelLength,c.voxelLength,c.voxelLength),color=self.colors[k,j,i,:])
 
         sim.start()
 
@@ -56,6 +56,8 @@ class ROBOT_AS_ROBOT(ROBOT):
 
         self.tensor = np.zeros([self.resolution,self.resolution,self.resolution],dtype='f')
 
+        self.colors = np.zeros([self.resolution,self.resolution,self.resolution,3],dtype='f')
+
     def Paint_With(self,cppn):
 
         for k in range(0,self.resolution):
@@ -72,13 +74,21 @@ class ROBOT_AS_ROBOT(ROBOT):
 
                     inputs = [ z , y , x ]
 
-                    output = cppn.Evaluate_At( inputs ) 
+                    outputs = cppn.Evaluate_At( inputs ) 
 
-                    if output < 0:
+                    if outputs[0] < 0:
 
                         self.tensor[k,j,i] = 0 
                     else:
                         self.tensor[k,j,i] = 1
+
+                    minusOneToOne = outputs[1:]
+
+                    minusQuarterToQuarter = minusOneToOne * 0.25
+
+                    halfToOne = minusQuarterToQuarter + 0.75 # Keep the colors bright.
+
+                    self.colors[k,j,i,:] = halfToOne 
 
     def Print(self):
 
@@ -86,15 +96,13 @@ class ROBOT_AS_ROBOT(ROBOT):
 
     def Show(self):
 
-        self.Evaluate_In_Pyrosim(playPaused=True,playBlind=False,waitToFinish=False)
+        self.Evaluate_In_Pyrosim(playPaused=True,playBlind=False,waitToFinish=True)
 
-        fig = plt.figure()
-        ax = fig.gca(projection='3d')
-        ax.set_aspect('equal')
-
-        ax.voxels(self.tensor, edgecolor="k")
-
-        plt.show()
+        #fig = plt.figure()
+        #ax = fig.gca(projection='3d')
+        #ax.set_aspect('equal')
+        #ax.voxels(self.tensor, edgecolor="k")
+        #plt.show()
 
 # ----------------------- Private methods -----------------------
 

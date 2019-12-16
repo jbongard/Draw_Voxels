@@ -12,6 +12,6 @@ worstFitness = +1000000 # Fitness should always be minimized.
 
 # ---------- Robots ---------------------
 
-robotResolution = 7
+robotResolution = 12
 
-voxelLength = 0.5
+voxelLength = 2.0 / (robotResolution-1)
